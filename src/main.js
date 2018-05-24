@@ -4,6 +4,9 @@ import App from './App'
 Vue.config.productionTip = false
 App.mpType = 'app'
 
+//引入weiui
+import '../static/weui/weui.css'
+
 const app = new Vue(App)
 app.$mount()
 
@@ -13,8 +16,10 @@ export default {
     // 页面前带有 ^ 符号的，会被编译成首页，其他页面可以选填，我们会自动把 webpack entry 里面的入口页面加进去
     pages: [
         'pages/logs/main', 
-        '^pages/index/main',
+        // '^pages/index/main',
         'pages/personal/main', 
+        'pages/order/main', 
+        '^pages/type/main', 
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -23,13 +28,20 @@ export default {
       navigationBarTextStyle: 'black'
     },
     tabBar: {
-      "list": [{
-        "pagePath": "pages/index/main",
-        "text": "首页"
-      }, {
-        "pagePath": "pages/personal/main",
-        "text": "我的"
-      }]
+      "list": [
+        {
+          "pagePath": "pages/type/main",
+          "text": "首页"
+        }, 
+        {
+          "pagePath": "pages/order/main",
+          "text": "订单"
+        }, 
+        {
+          "pagePath": "pages/personal/main",
+          "text": "我的"
+        }
+      ]
     },
   }
 }
