@@ -21,6 +21,15 @@ export default {
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black'
-    }
+    },
+    tabBar: {
+      "list": [{
+        "pagePath": "pages/index/main",
+        "text": "首页"
+      }, {
+        "pagePath": "pages/personal/main",
+        "text": "我的"
+      }]
+    },
   }
 }
