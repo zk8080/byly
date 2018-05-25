@@ -1,79 +1,46 @@
 <template>
-  <div class="page">
-    <div class="page__bd">
-      <div class="weui-tab">
-        <div class="weui-navbar">
-          <block v-for="(item,index) in tabs" :key="index">
-            <div :id="index" :class="{'weui-bar__item_on':activeIndex == index}" class="weui-navbar__item" @click="tabClick">
-              <div class="weui-navbar__title">{{item}}</div>
-            </div>
-          </block>
-          <div class="weui-navbar__slider" :class="navbarSliderClass"></div>
-        </div>
-        <div class="weui-tab__panel">
-          <div class="weui-tab__content" :hidden="activeIndex != 0">选项一的内容</div>
-          <div class="weui-tab__content" :hidden="activeIndex != 1">选项二的内容</div>
-          <div class="weui-tab__content" :hidden="activeIndex != 2">选项三的内容</div>
-        </div>
-      </div>
-    </div>
+  <div class="counter-warp">
+    <p>Vuex counter：{{ count }}</p>
+    <p>
+      <button @click="increment">+</button>
+      <button @click="decrement">-</button>
+    </p>
+
+    <a href="/pages/index/main" class="home">去往首页</a>
   </div>
 </template>
 
 <script>
+// Use Vuex
+import store from './store'
+
 export default {
-  data() {
-    return {
-      tabs: ["选项一", "选项二", "选项三"],
-      activeIndex: 0,
-      fontSize: 30
-    }
-  },
   computed: {
-    navbarSliderClass() {
-      if (this.activeIndex == 0) {
-        return 'weui-navbar__slider_0'
-      }
-      if (this.activeIndex == 1) {
-        return 'weui-navbar__slider_1'
-      }
-      if (this.activeIndex == 2) {
-        return 'weui-navbar__slider_2'
-      }
+    count () {
+      return store.state.count
     }
   },
   methods: {
-    tabClick(e) {
-      console.log(e);
-      this.activeIndex = e.currentTarget.id;
+    increment () {
+      store.commit('increment')
+    },
+    decrement () {
+      store.commit('decrement')
     }
   }
 }
 </script>
 
-<style scoped>
-page,
-.page,
-.page__bd {
-  height: 100%;
-}
-.page__bd {
-  padding-bottom: 0;
-}
-.weui-tab__content {
-  padding-top: 60px;
+<style>
+.counter-warp {
   text-align: center;
+  margin-top: 100px;
 }
-.weui-navbar__slider_0 {
-  left: 29rpx;
-  transform: translateX(0);
-}
-.weui-navbar__slider_1 {
-  left: 29rpx;
-  transform: translateX(250rpx);
-}
-.weui-navbar__slider_2 {
-  left:29rpx;
-  transform: translateX(500rpx);
+.home {
+  display: inline-block;
+  margin: 100px auto;
+  padding: 5px 10px;
+  color: blue;
+  border: 1px solid blue;
 }
 </style>

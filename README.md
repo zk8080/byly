@@ -1,4 +1,4 @@
-# byly-web
+# byly
 
 > A Mpvue project
 

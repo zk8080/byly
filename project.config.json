@@ -10,7 +10,7 @@
 	"miniprogramRoot": "./dist/",
 	"compileType": "miniprogram",
 	"appid": "touristappid",
-	"projectname": "byly-web",
+	"projectname": "byly",
 	"condition": {
 		"search": {
 			"current": -1,
