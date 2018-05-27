@@ -68,6 +68,10 @@ export default {
 </script>
 
 <style scoped>
+.container{
+  display: flex;
+  flex-direction: column;
+}
 .userinfo {
   display: flex;
   align-items: center;

@@ -16,10 +16,10 @@ export default {
     // 页面前带有 ^ 符号的，会被编译成首页，其他页面可以选填，我们会自动把 webpack entry 里面的入口页面加进去
     pages: [
         'pages/logs/main', 
-        '^pages/index/main',
+        // '^pages/index/main',
         'pages/personal/main', 
         'pages/order/main', 
-        // 'pages/type/main', 
+        '^pages/type/main', 
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -31,7 +31,7 @@ export default {
 
       "list": [
         {
-          "pagePath": "pages/index/main",
+          "pagePath": "pages/type/main",
           "text": "首页"
         }, 
         {

@@ -12,12 +12,15 @@ export default {
 </script>
 
 <style>
+page{
+  height: 100%;
+}
 .container {
   height: 100%;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   box-sizing: border-box;
 }
 /* this rule will be remove */
