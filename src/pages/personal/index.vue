@@ -6,20 +6,37 @@
       <div class="userinfo-nickname">
         <p v-if="userInfo.nickName">{{userInfo.nickName}}</p>
         <p v-else>
-          <a href="javascript:;">登录</a>
+          <a href="/pages/login/main">登录</a>
         </p>
       </div>
     </div>
     <div class="company-infor">
-      <div class="about">
-        <text>关于我们</text>
-        <img src="/static/images/arrowright.png" alt="">
+      
+      <div class="website" @click="gotoOrder">
+        <a href="/pages/order/main">
+          <div>
+            <img src="/static/images/order_01.png" alt="">
+            <text>我的订单</text>
+          </div>
+          <img src="/static/images/arrowright.png" alt="">
+        </a>
       </div>
-      <div class="website">
-        <text>官方网站</text>
+      <div class="about">
+        <a href="/pages/order/main">
+          <div>
+            <img src="/static/images/about.png" alt="">
+            <text>关于我们</text>
+          </div>
+          <img src="/static/images/arrowright.png" alt="">
+        </a>
       </div>
       <div class="hotline">
-        <text>服务热线</text>
+        <a href="/pages/order/main">
+          <div>
+            <img src="/static/images/tel.png" alt="">
+            <text>服务热线</text>
+          </div>
+        </a>
       </div>
     </div>
 
@@ -40,8 +57,13 @@ export default {
 
   methods: {
     bindViewTap () {
-      const url = '../logs/main'
+      const url = '../login/main'
       wx.navigateTo({ url })
+    },
+    gotoOrder(){
+      console.log( "aaa" );
+      const url = '../order/main'
+      wx.switchTab({ url })
     },
     getUserInfo () {
       // 调用登录接口
@@ -96,19 +118,50 @@ export default {
   margin-top: 100px;
   width: 100%;
 }
-.company-infor div{
+/* .company-infor .about{
   border-bottom: 1px solid #ccc;
   background-color: #fff;
-  padding: 10px 20px;
+  padding: 10px 10px;
   font-size: 16px;
   width: 100%;
   display: flex;
   box-sizing: border-box;
 }
-.company-infor div text{
+.company-infor .website{
+  border-bottom: 1px solid #ccc;
+  background-color: #fff;
+  padding: 10px 10px;
+  font-size: 16px;
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+}
+.company-infor .hotline{
+  border-bottom: 1px solid #ccc;
+  background-color: #fff;
+  padding: 10px 10px;
+  font-size: 16px;
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+} */
+.company-infor a{
+  border-bottom: 1px solid #ccc;
+  background-color: #fff;
+  padding: 10px 10px;
+  font-size: 16px;
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+}
+.company-infor a div{
   flex: 1;
 }
-.company-infor div img{
+.company-infor a div img{
+  vertical-align: sub;
+  margin-right: 5px;
+}
+.company-infor a img{
   width: 20px;
   height: 20px;
 }

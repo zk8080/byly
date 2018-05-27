@@ -20,6 +20,8 @@ export default {
         'pages/personal/main', 
         'pages/order/main', 
         '^pages/type/main', 
+        'pages/login/main', 
+        'pages/register/main', 
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -32,15 +34,21 @@ export default {
       "list": [
         {
           "pagePath": "pages/type/main",
-          "text": "首页"
+          "text": "分类",
+          "iconPath": "/static/images/type.png",
+          "selectedIconPath": "/static/images/type_active.png"
         }, 
         {
           "pagePath": "pages/order/main",
-          "text": "订单"
+          "text": "订单",
+          "iconPath": "/static/images/order.png",
+          "selectedIconPath": "/static/images/order_active.png"
         }, 
         {
           "pagePath": "pages/personal/main",
-          "text": "我的"
+          "text": "我的",
+          "iconPath": "/static/images/personal.png",
+          "selectedIconPath": "/static/images/personal_active.png"
         }
       ]
     },

@@ -11,9 +11,9 @@
           <div class="weui-navbar__slider" :class="navbarSliderClass"></div>
         </div>
         <div class="weui-tab__panel">
-          <div class="weui-tab__content" :hidden="activeIndex != 0">选项一的内容</div>
-          <div class="weui-tab__content" :hidden="activeIndex != 1">选项二的内容</div>
-          <div class="weui-tab__content" :hidden="activeIndex != 2">选项三的内容</div>
+          <div class="weui-tab__content" :hidden="activeIndex != 0">待付款</div>
+          <div class="weui-tab__content" :hidden="activeIndex != 1">待使用</div>
+          <div class="weui-tab__content" :hidden="activeIndex != 2">已使用</div>
         </div>
       </div>
     </div>
@@ -24,7 +24,7 @@
 export default {
   data() {
     return {
-      tabs: ["选项一", "选项二", "选项三"],
+      tabs: ["待付款", "待使用", "已使用"],
       activeIndex: 0,
       fontSize: 30
     }
