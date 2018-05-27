@@ -1,6 +1,6 @@
 <template>
   	<view class="container">
-	  	<view class="swiper-tab">  
+	  	<div class="swiper-tab">  
 	      <!-- <view :class="currentTab==0 ? 'swiper-tab-list on' : 'swiper-tab-list'" data-current="0" @click="swichNav">水果</view>  
 	      <view :class="currentTab==1 ? 'swiper-tab-list on' : 'swiper-tab-list'" data-current="1" @click="swichNav">薯片</view>  
 	      <view :class="currentTab==2 ? 'swiper-tab-list on' : 'swiper-tab-list'" data-current="2" @click="swichNav">辣条</view>
@@ -8,23 +8,23 @@
 
 
           <div v-for="(item, index) in typeList" :key="index" :class="currentTab==index ? 'swiper-tab-list on' : 'swiper-tab-list'" :data-current="index" @click="swichNav">{{item.typeName}}</div>  
-	  	</view>
-	  	<swiper :current="currentTab" :vertical="vertical"  @change="bindChange">
-		    <swiper-item v-for="(item, index) in typeList" :key="index">
+	  	</div>
+	  	<div class="swiper-cont">
+		    <div v-for="(item, index) in typeList" :key="index" :class="currentTab==index ? 'swiper-cont-list cur' : 'swiper-cont-list'">
                 <div class="weui-panel__bd" v-for="(detailItem, detailIndex) in item.detailList" :key="detailIndex">
-                    <navigator url="" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+                    <navigator url="/pages/goods_detail/main" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
                         <div class="weui-media-box__hd weui-media-box__hd_in-appmsg">
                         <image class="weui-media-box__thumb" :src="detailItem.imgUrl" />
                         </div>
                         <div class="weui-media-box__bd weui-media-box__bd_in-appmsg">
                             <div class="weui-media-box__title">{{detailItem.detailName}}</div>
-                            <div class="weui-media-box__desc">{{detailItem.detailRemark}}</div>
+                            <!-- <div class="weui-media-box__desc">{{detailItem.detailRemark}}</div> -->
                             <div class="price">¥{{detailItem.detailPrice}}</div> 
                         </div>
                     </navigator>
                 </div>
-		    </swiper-item>
-	  	</swiper>
+		    </div>
+	  	</div>
   	</view>
 </template>
 
@@ -47,7 +47,50 @@ export default {
                         detailName: '旗舰店',
                         detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
                         detailPrice: '228'
-                    }
+                    },
+                    {
+                        imgUrl: base64.icon60,
+                        detailName: '旗舰店',
+                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
+                        detailPrice: '228'
+                    },
+                    {
+                        imgUrl: base64.icon60,
+                        detailName: '旗舰店',
+                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
+                        detailPrice: '228'
+                    },
+                    {
+                        imgUrl: base64.icon60,
+                        detailName: '旗舰店',
+                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
+                        detailPrice: '228'
+                    },
+                    {
+                        imgUrl: base64.icon60,
+                        detailName: '旗舰店',
+                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
+                        detailPrice: '228'
+                    },
+                    {
+                        imgUrl: base64.icon60,
+                        detailName: '旗舰店',
+                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
+                        detailPrice: '228'
+                    },
+                    {
+                        imgUrl: base64.icon60,
+                        detailName: '旗舰店',
+                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
+                        detailPrice: '228'
+                    },
+                    {
+                        imgUrl: base64.icon60,
+                        detailName: '旗舰店',
+                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
+                        detailPrice: '228'
+                    },
+                    
                 ]
             },
             {
@@ -128,28 +171,38 @@ export default {
 .container{
   display: flex;
   height: 100%;
-  font-size: 28rpx;
+  font-size: 16px;
+  overflow: hidden;
 }
 .swiper-tab{
   width: 20%;
   height: 100%;
-  border-right: 2rpx solid #ccc;
+  border-right: 1px solid #ccc;
 }
 .swiper-tab .swiper-tab-list{
   text-align: center;
-  height: 100rpx;
-  line-height: 100rpx;
+  height: 50px;
+  line-height: 50px;
+  width: 80px;
 }
 .on{
-  border-left: 4rpx solid #119a26;
+  border-left: 2px solid #119a26;
   color: #119a26;
 }
-swiper{
-  flex: 1;
-  height: 100%;
+.weui-media-box{
+    box-sizing: border-box;
 }
-swiper swiper-item{
-  height: 100%;
+.swiper-cont{
+   flex: 1;
+   height: 100%;
+}
+.swiper-cont-list{
+    display: none;
+    height: 100%;
+    overflow: auto;
+}
+.cur{
+    display: block;
 }
 .weui-media-box__desc{
     text-overflow: ellipsis;
@@ -159,4 +212,12 @@ swiper swiper-item{
 .price{
     color: red;
 }
+.weui-media-box__bd_in-appmsg{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    height:60px;
+}
+
+
 </style>

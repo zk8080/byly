@@ -22,6 +22,7 @@ export default {
         '^pages/type/main', 
         'pages/login/main', 
         'pages/register/main', 
+        'pages/goods_detail/main', 
     ],
     window: {
       backgroundTextStyle: 'light',
