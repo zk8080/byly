@@ -6,6 +6,6 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarTitleText: '分类'
+    navigationBarTitleText: '宝燕乐园'
   }
 }

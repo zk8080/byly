@@ -14,7 +14,7 @@
                 <div class="weui-panel__bd" v-for="(detailItem, detailIndex) in item.detailList" :key="detailIndex">
                     <navigator url="/pages/goods_detail/main" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
                         <div class="weui-media-box__hd weui-media-box__hd_in-appmsg">
-                        <image class="weui-media-box__thumb" :src="detailItem.imgUrl" />
+                            <image class="weui-media-box__thumb" :src="detailItem.imgUrl" />
                         </div>
                         <div class="weui-media-box__bd weui-media-box__bd_in-appmsg">
                             <div class="weui-media-box__title">{{detailItem.detailName}}</div>

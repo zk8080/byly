@@ -1,11 +1,14 @@
 <template>
   <div class="container">
 
-    <div class="userinfo" @click="bindViewTap">
+    <div class="userinfo" >
       <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover" />
       <div class="userinfo-nickname">
-        <p v-if="userInfo.nickName">{{userInfo.nickName}}</p>
+        <!-- <p v-if="userInfo.nickName">{{userInfo.nickName}}</p>
         <p v-else>
+          <a href="/pages/login/main">登录</a>
+        </p> -->
+        <p>
           <a href="/pages/login/main">登录</a>
         </p>
       </div>
@@ -61,7 +64,7 @@ export default {
       wx.navigateTo({ url })
     },
     gotoOrder(){
-      console.log( "aaa" );
+
       const url = '../order/main'
       wx.switchTab({ url })
     },
