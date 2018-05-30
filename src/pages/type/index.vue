@@ -11,15 +11,15 @@
 	  	</div>
 	  	<div class="swiper-cont">
 		    <div v-for="(item, index) in typeList" :key="index" :class="currentTab==index ? 'swiper-cont-list cur' : 'swiper-cont-list'">
-                <div class="weui-panel__bd" v-for="(detailItem, detailIndex) in item.detailList" :key="detailIndex">
+                <div class="weui-panel__bd" v-for="(detailItem, detailIndex) in goodsList" :key="detailIndex">
                     <navigator url="/pages/goods_detail/main" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
                         <div class="weui-media-box__hd weui-media-box__hd_in-appmsg">
-                            <image class="weui-media-box__thumb" :src="detailItem.imgUrl" />
+                            <image class="weui-media-box__thumb" :src=" 'https://www.baoyanmall.cn' + detailItem.thum_bnail_image_url" />
                         </div>
                         <div class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-                            <div class="weui-media-box__title">{{detailItem.detailName}}</div>
+                            <div class="weui-media-box__title">{{detailItem.commodity_name}}</div>
                             <!-- <div class="weui-media-box__desc">{{detailItem.detailRemark}}</div> -->
-                            <div class="price">¥{{detailItem.detailPrice}}</div> 
+                            <div class="price">¥{{detailItem.terminalPrice}}</div> 
                         </div>
                     </navigator>
                 </div>
@@ -41,6 +41,7 @@ export default {
             // icon60: base64.icon60,
             typeList: [],
             goodsList: [],
+            
         }
     },
     methods: {
@@ -68,7 +69,7 @@ export default {
             }
         },
         async getGoodsList(data) {
-            console.log(qs,"qs")
+            // console.log(qs,"qs")
 
             let params = {
                     businessId: data.businessId,
@@ -77,40 +78,12 @@ export default {
                     sortField:"commodity_number",
                     sortMode:"ASC",
                 }
-            params = qs.stringify(params)
-            // let params
             const res = await api.queryMaxTypeCommoDity(params)
-            console.log( res, "resres" )
+            if( res.code == "200" ){
+                console.log(res.result)
+                this.goodsList = res.result;
+            }
         },
-        // getGoodsList(data){
-        //     let params = {
-        //         businessId: data.businessId,
-        //         commoDityTypeId: data.commoDityTypeId,
-        //         businessType: data.businessType,
-        //         sortField:"commodity_number",
-        //         sortMode:"ASC",
-        //     }
-        //     const url = "https://www.baoyanmall.cn/CommoDity/queryMaxTypeCommoDity"
-        //     wx.request({
-        //         url: url,
-        //         method: "POST",
-        //         data: params,
-        //         header: {
-        //             'content-type': 'application/x-www-form-urlencoded' // 默认值
-        //         },
-        //         success: function (res) {
-        //             // console.log(res.data.subjects)
-        //             // _this.setData({
-        //             // movies: res.data.subjects,
-        //             // loading: false
-        //             // })
-        //             console.log( res, "resres" )
-        //         },
-        //         fail: function (err) {
-        //             console.log( err )
-        //         }
-        //     });
-        // }
     },
     onShow() {
         this.getTypeData();
@@ -163,6 +136,9 @@ export default {
 }
 .price{
     color: red;
+}
+.weui-media-box__title {
+    font-size: 14px;
 }
 .weui-media-box__bd_in-appmsg{
     display:flex;
