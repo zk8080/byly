@@ -142,7 +142,9 @@ export default {
         _this.orderNum = num;
     },
     gotoPay(){
-        console.log( "支付" )
+        wx.navigateTo({
+            url: '../msg-success/main'
+        })
     }
   },
 }

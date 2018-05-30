@@ -11,21 +11,22 @@
             </div>
             <div class="order-title">
                 <text class="title">{{orderData.title}}</text>
-                <text class='totalprice'>
+                <div class='totalprice'>
                     <text class="num">{{orderData.orderNum}}张</text>
-                    <text class="price">¥{{orderData.price}}</text>
-                </text>
+                    
+                </div>
             </div>
         </div>
-        <!-- <div class="time">
-                <text>时间：2018-01-08 09:00</text>
-        </div> -->
+        <div class="time">
+                <text>到期时间：{{orderData.time}}</text>
+        </div>
         <div class="address">
                 <text>地址：{{orderData.address}}</text>
         </div>
-        <a href="">
+        <a href="/pages/order_detail/main">
             <div class="ewm clearfix">
-            <text class="fr">查看二维码></text>
+              <text class="price">¥{{orderData.price}}</text>
+              <text class="fr">查看二维码></text>
             </div>
         </a>
     </div>
@@ -42,7 +43,7 @@ export default {
 .order-item{
   border: 1px solid #ccc;
   border-radius: 6rpx;
-  box-shadow: 0 0 4rpx #888888;
+  /* box-shadow: 0 0 4rpx #888888; */
   padding: 10rpx 0;
   margin-bottom: 20rpx;
 }
@@ -75,14 +76,15 @@ export default {
 }
 .order-title .totalprice{
   font-size: 32rpx;
+  
 }
 .order-title .totalprice .num{
   color: #707070;
-  margin-right: 10rpx;
+  /* margin-right: 10rpx; */
 }
-.order-title .totalprice .price{
+/* .order-title .totalprice .price{
   color: #d81e06;
-}
+} */
 .time{
   padding: 0 20rpx;
   color: #707070;
@@ -95,10 +97,15 @@ export default {
   margin-bottom: 10rpx;
 }
 .ewm{
-    text-align: right;
+  text-align: right;
   padding: 10rpx 20rpx;
   border-top: 1px solid #ccc;
   font-size: 32rpx;
-  color: #d81e06;
+  color: #119a26;
+  display: flex;
+  justify-content: space-between;
+}
+.ewm .price{
+  color: red;
 }
 </style>

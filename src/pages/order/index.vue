@@ -17,7 +17,7 @@
           <div class="weui-tab__content" :hidden="activeIndex != 1">待使用</div>
           <div class="weui-tab__content" :hidden="activeIndex != 2">已使用</div> -->
           <div class="weui-tab__content" v-for="(item, index) in orderList" :key="index" :hidden="activeIndex != index">
-              <orderC v-for="( orderItem, orderIndex ) in item.orderDetailList" :key="orderIndex"  :orderData="orderItem"></orderC>
+              <orderCard v-for="( orderItem, orderIndex ) in item.orderDetailList" :key="orderIndex"  :orderData="orderItem"></orderCard>
           </div>
         </div>
       </div>
@@ -26,60 +26,24 @@
 </template>
 
 <script>
-// import orderCard from '@/components/orderCard'
-import orderC from '@/components/orderC'
+import orderCard from '@/components/orderCard'
+// import orderC from '@/components/orderC'
+import api from '../../utils/api'
+
 
 export default {
   data() {
     return {
-      tabs: ["待付款", "待使用", "已使用"],
+      tabs: ["未使用", "已使用", "已过期"],
       activeIndex: 0,
       fontSize: 30,
       orderList: [
-          {
-            type: '01',
-            orderDetailList: [
-              {
-                orderNo: '1232131242',
-                status: '待使用',
-                orderNum: '5',
-                price: '2134',
-                title: '旗舰店',
-                address: '上海市浦东新区浦东新区浦东新区浦东新区浦东新区',
-              }
-            ]
-          },
-          {
-            type: '02',
-            orderDetailList: [
-              {
-                orderNo: '1232131242',
-                status: '待使用',
-                orderNum: '5',
-                price: '2134',
-                title: '旗舰店',
-                address: '上海市浦东新区浦东新区浦东新区浦东新区浦东新区',
-              }
-            ]
-          },
-          {
-            type: '03',
-            orderDetailList: [
-              {
-                orderNo: '1232131242',
-                status: '待使用',
-                orderNum: '5',
-                price: '2134',
-                title: '旗舰店',
-                address: '上海市浦东新区浦东新区浦东新区浦东新区浦东新区',
-              }
-            ]
-          },
+          
       ]
     }
   },
   components: {
-    orderC,
+    orderCard,
   },
   computed: {
     navbarSliderClass() {
@@ -96,10 +60,20 @@ export default {
   },
   methods: {
     tabClick(e) {
-      console.log(e);
+      // console.log(e);
       this.activeIndex = e.currentTarget.id;
-    }
-  }
+    },
+    // async getData(){
+    //   console.log( api,"apiapii" )
+    //   const res = await api.queryNewBusinessComPany({})
+    //   console.log( res, "paramsparams" )
+    // }
+  },
+  mounted(){
+    // this.getData();
+    // console.log( res, "resresres1111" )
+  },
+
 }
 </script>
 
@@ -111,6 +85,9 @@ page,
 }
 .page__bd {
   padding-bottom: 0;
+}
+.weui-navbar__item{
+  background-color: #fff;
 }
 .weui-tab__content {
   /* padding-top: 60px; */

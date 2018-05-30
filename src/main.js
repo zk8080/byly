@@ -1,7 +1,15 @@
 import Vue from 'vue'
 import App from './App'
+// //引入flyio请求
+// import Fly from "flyio/dist/npm/wx";
+// var fly=new Fly();
+// fly.config.baseURL='https://www.baoyanmall.cn';
 
-Vue.config.productionTip = false
+// Vue.prototype.$http=fly; //将fly实例挂在vue原型上
+
+Vue.config.productionTip = false;
+
+
 App.mpType = 'app'
 
 //引入weiui
@@ -23,6 +31,9 @@ export default {
         'pages/login/main', 
         'pages/register/main', 
         'pages/goods_detail/main', 
+        'pages/order_detail/main',
+        'pages/msg-success/main',
+        'pages/msg-fail/main',         
     ],
     window: {
       backgroundTextStyle: 'light',

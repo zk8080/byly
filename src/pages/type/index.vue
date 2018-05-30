@@ -7,7 +7,7 @@
 	      <view :class="currentTab==3 ? 'swiper-tab-list on' : 'swiper-tab-list'" data-current="3" @click="swichNav">方便面</view>  -->
 
 
-          <div v-for="(item, index) in typeList" :key="index" :class="currentTab==index ? 'swiper-tab-list on' : 'swiper-tab-list'" :data-current="index" @click="swichNav">{{item.typeName}}</div>  
+          <div v-for="(item, index) in typeList" :key="index" :class="currentTab==index ? 'swiper-tab-list on' : 'swiper-tab-list'" :data-current="index" @click="swichNav">{{item.shortName}}</div>  
 	  	</div>
 	  	<div class="swiper-cont">
 		    <div v-for="(item, index) in typeList" :key="index" :class="currentTab==index ? 'swiper-cont-list cur' : 'swiper-cont-list'">
@@ -30,140 +30,92 @@
 
 <script>
 import base64 from '../../../static/images/base64';
-
+import api from '../../utils/api'
+import qs from 'qs';
 export default {
     
-  data () {
-    return{
-        vertical: true,
-        currentTab: 0,
-        // icon60: base64.icon60,
-        typeList: [
-            {
-                typeName: '分类1',
-                detailList: [
-                    {
-                        imgUrl: base64.icon60,
-                        detailName: '旗舰店',
-                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
-                        detailPrice: '228'
-                    },
-                    {
-                        imgUrl: base64.icon60,
-                        detailName: '旗舰店',
-                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
-                        detailPrice: '228'
-                    },
-                    {
-                        imgUrl: base64.icon60,
-                        detailName: '旗舰店',
-                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
-                        detailPrice: '228'
-                    },
-                    {
-                        imgUrl: base64.icon60,
-                        detailName: '旗舰店',
-                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
-                        detailPrice: '228'
-                    },
-                    {
-                        imgUrl: base64.icon60,
-                        detailName: '旗舰店',
-                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
-                        detailPrice: '228'
-                    },
-                    {
-                        imgUrl: base64.icon60,
-                        detailName: '旗舰店',
-                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
-                        detailPrice: '228'
-                    },
-                    {
-                        imgUrl: base64.icon60,
-                        detailName: '旗舰店',
-                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
-                        detailPrice: '228'
-                    },
-                    {
-                        imgUrl: base64.icon60,
-                        detailName: '旗舰店',
-                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
-                        detailPrice: '228'
-                    },
-                    
-                ]
-            },
-            {
-                typeName: '分类2',
-                detailList: [
-                    {
-                        imgUrl: base64.icon60,
-                        detailName: '旗舰店',
-                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
-                        detailPrice: '228'
-                    }
-                ]
-            },
-            {
-                typeName: '分类3',
-                detailList: [
-                    {
-                        imgUrl: base64.icon60,
-                        detailName: '旗舰店',
-                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
-                        detailPrice: '228'
-                    }
-                ]
-            },
-            {
-                typeName: '分类4',
-                detailList: [
-                    {
-                        imgUrl: base64.icon60,
-                        detailName: '旗舰店',
-                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
-                        detailPrice: '228'
-                    }
-                ]
-            },
-            {
-                typeName: '分类5',
-                detailList: [
-                    {
-                        imgUrl: base64.icon60,
-                        detailName: '旗舰店',
-                        detailRemark: '每周二16：00闭园消毒；入园中途不可换人，（21、22日三楼水上乐园儿童多滑梯区域暂不开放）',
-                        detailPrice: '228'
-                    }
-                ]
-            },
-        ]
-    }
-  },
-  methods: {
-    swichNav (e) {
-        if (this.currentTab === e.target.dataset.current) {
-            return false;
-        }else{
-            this.currentTab = e.target.dataset.current
+    data () {
+        return{
+            vertical: true,
+            currentTab: 0,
+            // icon60: base64.icon60,
+            typeList: [],
+            goodsList: [],
         }
     },
-    bindChange (e) {
-        this.currentTab = e.target.current
+    methods: {
+        swichNav (e) {
+            if (this.currentTab === e.target.dataset.current) {
+                return false;
+            }else{
+                let index = e.target.dataset.current;
+                this.getGoodsList(this.typeList[index]);
+                this.currentTab = e.target.dataset.current
+            }
+        },
+        bindChange (e) {
+            this.currentTab = e.target.current
+        },
+        async getTypeData(){
+            // console.log( this, "businessType" )
+            const res = await api.queryNewBusinessComPany({})
+            // console.log( res )
+            if( res.code == "200" ){
+                let dataList = res.result;
+                // console.log( dataList, "dataList" )
+                this.typeList = dataList;
+                this.getGoodsList(this.typeList[0]);
+            }
+        },
+        async getGoodsList(data) {
+            console.log(qs,"qs")
+
+            let params = {
+                    businessId: data.businessId,
+                    commoDityTypeId: data.commoDityTypeId,
+                    businessType: data.businessType,
+                    sortField:"commodity_number",
+                    sortMode:"ASC",
+                }
+            params = qs.stringify(params)
+            // let params
+            const res = await api.queryMaxTypeCommoDity(params)
+            console.log( res, "resres" )
+        },
+        // getGoodsList(data){
+        //     let params = {
+        //         businessId: data.businessId,
+        //         commoDityTypeId: data.commoDityTypeId,
+        //         businessType: data.businessType,
+        //         sortField:"commodity_number",
+        //         sortMode:"ASC",
+        //     }
+        //     const url = "https://www.baoyanmall.cn/CommoDity/queryMaxTypeCommoDity"
+        //     wx.request({
+        //         url: url,
+        //         method: "POST",
+        //         data: params,
+        //         header: {
+        //             'content-type': 'application/x-www-form-urlencoded' // 默认值
+        //         },
+        //         success: function (res) {
+        //             // console.log(res.data.subjects)
+        //             // _this.setData({
+        //             // movies: res.data.subjects,
+        //             // loading: false
+        //             // })
+        //             console.log( res, "resres" )
+        //         },
+        //         fail: function (err) {
+        //             console.log( err )
+        //         }
+        //     });
+        // }
     },
-  },
+    onShow() {
+        this.getTypeData();
+    }
   
-  onLoad: function (options) {
-  },
-  onReady: function () {
-    // Do something when page ready.
-  },
-  onShow: function () {
-    // Do something when page show.
-  },
-  onHide: function () {
-    // Do something when page hide.
-  }
 }
 </script>
 
