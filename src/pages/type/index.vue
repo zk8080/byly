@@ -18,7 +18,7 @@
                         </div>
                         <div class="weui-media-box__bd weui-media-box__bd_in-appmsg">
                             <div class="weui-media-box__title">{{detailItem.commodity_name}}</div>
-                            <!-- <div class="weui-media-box__desc">{{detailItem.detailRemark}}</div> -->
+                            <div class="weui-media-box__desc">{{detailItem.valid}}</div>
                             <div class="price">¥{{detailItem.terminalPrice}}</div> 
                         </div>
                     </navigator>
@@ -144,7 +144,7 @@ export default {
     display:flex;
     flex-direction:column;
     justify-content:space-between;
-    height:60px;
+    height:70px;
 }
 
 
