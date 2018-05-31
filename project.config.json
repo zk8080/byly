@@ -9,7 +9,7 @@
 	},
 	"miniprogramRoot": "./dist/",
 	"compileType": "miniprogram",
-	"appid": "touristappid",
+	"appid": "wxf2eb2f5b3a5c7fdd",
 	"projectname": "byly",
 	"condition": {
 		"search": {
