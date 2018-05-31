@@ -1,11 +1,6 @@
 import Vue from 'vue'
 import App from './App'
-// //引入flyio请求
-// import Fly from "flyio/dist/npm/wx";
-// var fly=new Fly();
-// fly.config.baseURL='https://www.baoyanmall.cn';
 
-// Vue.prototype.$http=fly; //将fly实例挂在vue原型上
 
 Vue.config.productionTip = false;
 

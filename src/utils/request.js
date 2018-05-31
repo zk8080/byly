@@ -2,19 +2,21 @@ import Fly from "flyio/dist/npm/wx";
 
 const request = new Fly()
 
-request.config.baseURL='https://www.baoyanmall.cn';
+request.config.baseURL='https://byloft.top';
 
 request.interceptors.request.use((request) => {
   // wx.showNavigationBarLoading()
+  console.log( request, "request" )
   wx.showLoading({
     title: '加载中',
   })
-  request.headers['content-type']="application/x-www-form-urlencoded";
+  request.headers['Content-type']="application/x-www-form-urlencoded";
   return request
 })
 
 request.interceptors.response.use(
   (response, promise) => {
+    
     // wx.hideNavigationBarLoading()
     wx.hideLoading();
     return promise.resolve(response.data)

@@ -27,6 +27,48 @@ const api = {
                     console.log(err)
                 })
         })
+    },
+
+    //登录接口
+    queryLogin: (req) => {
+        req = qs.stringify(req);
+        return new Promise( resolve => {
+            requert.post( "/CoreUser/userLogin", req )
+                .then( res => {
+                    resolve(res)
+                } )
+                .catch( err => {
+                    console.log(err)
+                })
+        })
+    },
+
+    //获取验证码
+    querySendCode: (req) => {
+        req = qs.stringify(req);
+        return new Promise( resolve => {
+            requert.post( "/Code/newSendCode", req )
+                .then( res => {
+                    resolve(res)
+                } )
+                .catch( err => {
+                    console.log(err)
+                })
+        })
+    },
+
+    //注册接口
+    queryRegister: (req) => {
+        req = qs.stringify(req);
+        return new Promise( resolve => {
+            requert.post( "/CoreUser/userRegister", req )
+                .then( res => {
+                    resolve(res)
+                } )
+                .catch( err => {
+                    console.log(err)
+                })
+        })
     }
 }
 

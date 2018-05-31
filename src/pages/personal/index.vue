@@ -71,7 +71,8 @@ export default {
     getUserInfo () {
       // 调用登录接口
       wx.login({
-        success: () => {
+        success: (code) => {
+          console.log( code, "https://byloft.top" )
           wx.getUserInfo({
             success: (res) => {
               this.userInfo = res.userInfo

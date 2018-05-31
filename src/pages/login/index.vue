@@ -4,7 +4,7 @@
             <div class="weui-cell weui-cell_phone">
                 <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" placeholder="请输入手机号"/>
+                    <input class="weui-input" type="number" name="userName" @input="getUserName" placeholder="请输入手机号"/>
                 </div>
             </div>
             <div class="weui-cell weui-cell_vcode">
@@ -12,7 +12,7 @@
                     <label class="weui-label">密码</label>
                 </div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="password" placeholder="请输入密码"/>
+                    <input class="weui-input" type="password" name="userPwd" @input="getUserPwd" placeholder="请输入密码"/>
                 </div>
             </div>
         </div>
@@ -25,15 +25,17 @@
             </a>
         </div>
 
-        <button class="login_btn" size="default" type="primary">登录</button>
+        <button class="login_btn" size="default" type="primary" @click="login">登录</button>
     </div>
 </template>
 
 <script>
+import api from '../../utils/api'
 export default {
   data () {
     return {
-      userInfo: {}
+      username: '',
+      password: '',
     }
   },
 
@@ -42,7 +44,26 @@ export default {
   },
 
   methods: {
-
+      getUserName(e){
+          this.username = e.target.value;
+      },
+      getUserPwd(e){
+          this.password = e.target.value;
+      },
+      async login(){
+        //   wx.getSystemInfo({
+        //       success: (res)=>{
+        //           console.log(res, "resres")
+        //       }
+        //   })
+          const params = {
+              userName: this.username,
+              userPwd: this.password,
+              deviceId: ''
+          }
+          const res = await api.queryLogin(params);
+        //   console.log( res, 'res' )
+      }
   },
 
   created () {

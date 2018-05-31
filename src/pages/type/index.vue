@@ -30,8 +30,7 @@
 
 <script>
 import base64 from '../../../static/images/base64';
-import api from '../../utils/api'
-import qs from 'qs';
+import api from '../../utils/api';
 export default {
     
     data () {
@@ -41,7 +40,6 @@ export default {
             // icon60: base64.icon60,
             typeList: [],
             goodsList: [],
-            
         }
     },
     methods: {
@@ -58,19 +56,14 @@ export default {
             this.currentTab = e.target.current
         },
         async getTypeData(){
-            // console.log( this, "businessType" )
             const res = await api.queryNewBusinessComPany({})
-            // console.log( res )
             if( res.code == "200" ){
                 let dataList = res.result;
-                // console.log( dataList, "dataList" )
                 this.typeList = dataList;
                 this.getGoodsList(this.typeList[0]);
             }
         },
         async getGoodsList(data) {
-            // console.log(qs,"qs")
-
             let params = {
                     businessId: data.businessId,
                     commoDityTypeId: data.commoDityTypeId,
@@ -80,7 +73,6 @@ export default {
                 }
             const res = await api.queryMaxTypeCommoDity(params)
             if( res.code == "200" ){
-                console.log(res.result)
                 this.goodsList = res.result;
             }
         },
