@@ -2,7 +2,7 @@
   <div class="container">
 
     <div class="userinfo" >
-      <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover" />
+      <img class="userinfo-avatar" src="/static/images/avatar.jpg" background-size="cover" />
       <div class="userinfo-nickname">
         <!-- <p v-if="userInfo.nickName">{{userInfo.nickName}}</p>
         <p v-else>
@@ -89,6 +89,11 @@ export default {
   created () {
     // 调用应用实例的方法获取全局数据
     this.getUserInfo()
+    
+  },
+  onLoad(){
+    let storageObj =  wx.getStorageSync("loginInfo"); 
+    console.log( storageObj, "storageObj" )
   }
 }
 </script>

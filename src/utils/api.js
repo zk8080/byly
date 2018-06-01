@@ -33,7 +33,7 @@ const api = {
     queryLogin: (req) => {
         req = qs.stringify(req);
         return new Promise( resolve => {
-            requert.post( "/CoreUser/userLogin", req )
+            requert.post( "/CoreUser/wxUserLogin", req )
                 .then( res => {
                     resolve(res)
                 } )
@@ -61,7 +61,7 @@ const api = {
     queryRegister: (req) => {
         req = qs.stringify(req);
         return new Promise( resolve => {
-            requert.post( "/CoreUser/userRegister", req )
+            requert.post( "/CoreUser/wxUserRegister", req )
                 .then( res => {
                     resolve(res)
                 } )

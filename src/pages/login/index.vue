@@ -17,10 +17,10 @@
             </div>
         </div>
         <div class="weui-cells__tips">
-            <a href="/pages/register/main">
+            <a href="/pages/authCode/main?type=2">
                 忘记密码
             </a>
-            <a href="/pages/register/main">
+            <a href="/pages/authCode/main?type=1">
                 注册
             </a>
         </div>
@@ -44,26 +44,41 @@ export default {
   },
 
   methods: {
-      getUserName(e){
-          this.username = e.target.value;
-      },
-      getUserPwd(e){
-          this.password = e.target.value;
-      },
-      async login(){
-        //   wx.getSystemInfo({
-        //       success: (res)=>{
-        //           console.log(res, "resres")
-        //       }
-        //   })
-          const params = {
-              userName: this.username,
-              userPwd: this.password,
-              deviceId: ''
-          }
-          const res = await api.queryLogin(params);
-        //   console.log( res, 'res' )
-      }
+        getUserName(e){
+            this.username = e.target.value;
+        },
+        getUserPwd(e){
+            this.password = e.target.value;
+        },
+        login(){
+            wx.login({
+                success: (code) => {
+                    return new Promise( resolve => {
+                        let params = {
+                            userName: this.username,
+                            userPwd: this.password,
+                            code: code.code,
+                        };
+                        api.queryLogin(params).then( res=> {
+                            if( res.code == "200" ){
+                                console.log( 111 )
+                                const data = res.result;
+                                //存储用户信息
+                                wx.setStorageSync( 'loginInfo', data );
+                                const url = "../personal/main";
+                                wx.switchTab({ url });
+                            }
+                        });
+                        
+                    })
+                    
+                    
+                }
+            })
+
+        //   const res = await api.queryLogin(params);
+            //   console.log( res, 'res' )
+        }
   },
 
   created () {

@@ -2,68 +2,29 @@
     <div :class="showFullPage?'container cur':'container'">
         <swiper indicator-dots="true"
             autoplay="true">
-            <swiper-item v-for=" (item, index) in imgUrls" :key="index">
-                <img :src="item" class="slide-image" width="355" height="150"/>
+            <swiper-item v-for=" (item, index) in scroll_imgList" :key="index">
+                <image :lazy-load="lazy" :src="baseUrl + item.imageUrl" class="slide-image" width="355" height="150"/>
             </swiper-item>
         </swiper>
         <div class="goods_header">
             <div class="goods_title">
-                <p>{{goods_detail.title}}</p>
+                <p>{{dataList.commodity_name}}</p>
             </div>
             <div class="goods_attentions">
-                <p>{{goods_detail.attentions}}</p>
+                <p>{{dataList.commodity_describe }}</p>
             </div>
             <div class="goods_price">
-                <p>¥{{goods_detail.price}}</p>
+                <p>¥{{dataList.terminalPrice}}</p>
             </div>
         </div>
         <div class="pay_way">
             <img src="/static/images/pay.png" alt="">
             <span>支持微信支付</span>
         </div>
-        <div class="goods_info">
-            <div class="goods_address">
-                <img src="/static/images/address.png" alt="">
-                <span>
-                    上海市浦东新区浦东新区浦东新区浦东新区浦东新区
-                </span>
-            </div>
-            <div class="goods_tel">
-                <img src="/static/images/tel.png" alt="">
-                <span>
-                    021-343543536
-                </span>
-            </div>
-        </div> 
-        <div class="goods_datail">
-            <h1>优惠券详情</h1>
-            <div class="detial_cont">
-                <p>
-                    1.优惠券详情优惠券详情优惠券详情优惠券详情优惠券详情优惠券详情优惠券详情
-                </p>
-                <p>
-                    2.优惠券详情优惠券详情优惠券详情优惠券详情优惠券详情优惠券详情优惠券详情
-                </p>
-                <p>
-                    3.优惠券详情优惠券详情优惠券详情优惠券详情优惠券详情优惠券详情优惠券详情
-                </p>
-            </div> 
+        <div class="describe" v-for="(item, index) in describeImg" :key="index">
+            <image mode="widthFix" :lazy-load="lazy"  :src="baseUrl + item.imageUrl" alt="" />
         </div>
-        <div class="goods_notice">
-            <h1>购买须知</h1>
-            <div class="notice_cont">
-                <p>
-                    1.购买须知购买须知购买须知购买须知购买须知购买须知购买须知购买须知购买须知
-                </p>
-                <p>
-                    2.购买须知购买须知购买须知购买须知购买须知购买须知购买须知购买须知购买须知
-                </p>
-                <p>
-                    3.购买须知购买须知购买须知购买须知购买须知购买须知购买须知购买须知购买须知
-                </p>
-            </div> 
-        </div>
-        <div :class='showFullPage? "show fullpage ": "hide fullpage"' style="height: " @click='close'>
+        <div :class='showFullPage? "show fullpage ": "hide fullpage"' @click='close'>
             
         </div>
         <div class="order">
@@ -91,62 +52,66 @@
 
 <script>
 export default {
-  data() {
-    return {
-        imgUrls: [
-            'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg',
-            'http://img06.tooopen.com/images/20160818/tooopen_sy_175866434296.jpg',
-            'http://img06.tooopen.com/images/20160818/tooopen_sy_175833047715.jpg'
-        ],
-        goods_detail:{
-            "title": "旗舰店",
-            "attentions": "每周二16：00闭园消毒；入园中途不可换人",
-            "price": '150'
-        },
-        showFullPage: false,
-        orderShow: false,
-        orderNum: 1,
-        orderEnd: false,
-        height: '',
-    }
-  },
-  computed: {
-        
-  },
-  methods: {
-    open(){
-        this.showFullPage = true;
-        this.orderShow = true;
-        this.orderEnd = true;
-    },
-    close(){
-        this.showFullPage = false;
-        this.orderShow = false;
-        this.orderEnd = false;
-    },
-    jian: function () {
-        var _this = this;
-        if (_this.orderNum <= 1){
-            _this.orderNum = 1;
-        }else{
-        
-            var num = _this.orderNum - 1;
-            _this.orderNum = num;
+    data() {
+        return {
+            dataList:{},
+            scroll_imgList: [],
+            baseUrl: this.$baseUrl,
+            describeImg: [],
+            orderShow: false,
+            orderEnd: false,
+            showFullPage: false,
+            lazy: true,
+            orderNum: 1,
         }
-        
     },
-    add: function () {
-        // console.log(111)
-        var _this = this;
-        var num = _this.orderNum + 1;
-        _this.orderNum = num;
+    computed: {
+            
     },
-    gotoPay(){
-        wx.navigateTo({
-            url: '../msg-success/main'
-        })
+    methods: {
+        open(){
+
+            this.showFullPage = true;
+            this.orderShow = true;
+            this.orderEnd = true;
+        },
+        close(){
+            this.showFullPage = false;
+            this.orderShow = false;
+            this.orderEnd = false;
+        },
+        jian: function () {
+            var _this = this;
+            if (_this.orderNum <= 1){
+                _this.orderNum = 1;
+            }else{
+            
+                var num = _this.orderNum - 1;
+                _this.orderNum = num;
+            }
+            
+        },
+        add: function () {
+            // console.log(111)
+            var _this = this;
+            var num = _this.orderNum + 1;
+            _this.orderNum = num;
+        },
+        gotoPay(){
+            wx.navigateTo({
+                url: '../msg-success/main'
+            })
+        },
+    },
+    onLoad(){
+        let data = this.$root.$mp.query.data;
+        data = JSON.parse(data);
+        let imgList = JSON.parse(data.scroll_image_url);
+        let describe_image_url = JSON.parse(data.describe_image_url);
+        this.dataList = data;
+        this.scroll_imgList = imgList;
+        this.describeImg = describe_image_url;
     }
-  },
 }
 </script>
 
@@ -160,10 +125,11 @@ export default {
 }
 .container swiper{
     width: 100%;
-    height: 200px;
+    height: 220px;
 }
 swiper-item img{
     width: 100%;
+    height: 240px;
 }
 .goods_header{
     padding: 10px 20px;
@@ -254,6 +220,14 @@ swiper-item img{
 }
 .goods_notice .notice_cont p{
     margin-bottom: 5px;
+}
+.describe{
+    width: 100%;
+    padding-bottom: 30px;
+}
+.describe image{
+    width: 100%;
+    /* height: 1322px; */
 }
 .fullpage{
   width: 100%;

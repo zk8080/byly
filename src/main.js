@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import App from './App'
+import config from './config.js'
 
-
+Vue.prototype.$baseUrl = config.serverUrl;
 Vue.config.productionTip = false;
 
 App.mpType = 'app'
@@ -27,7 +28,8 @@ export default {
         'pages/goods_detail/main', 
         'pages/order_detail/main',
         'pages/msg-success/main',
-        'pages/msg-fail/main',         
+        'pages/msg-fail/main',    
+        'pages/authCode/main',       
     ],
     window: {
       backgroundTextStyle: 'light',

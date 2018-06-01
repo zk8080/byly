@@ -1,22 +1,7 @@
 <template>
     <div class="container">
-        <div class="weui-toptips weui-toptips_warn" v-if="showTopTips"></div>
+        <div class="weui-toptips weui-toptips_warn" v-if="showTopTips">{{tips}}</div>
         <div class="weui-cells weui-cells_form">
-            <div class="weui-cell weui-cell_phone">
-                <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" name="userName" @change="getuserName" placeholder="请输入手机号"/>
-                </div>
-            </div>
-            <div class="weui-cell weui-cell_vcode">
-                <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" @change="getauthCode" name="authCode" placeholder="请输入验证码"/>
-                </div>
-                <div class="weui-cell__ft">
-                   <button class="weui-vcode-btn" @click="sendAuthCode">获取验证码</button>
-                </div>
-            </div>
             <div class="weui-cell weui-cell_phone">
                 <div class="weui-cell__hd"><label class="weui-label">密码</label></div>
                 <div class="weui-cell__bd">
@@ -36,12 +21,13 @@
             </a>
         </div>
 
-        <button class="login_btn" size="default" type="primary" @clicl="regisiter">注册</button>
+        <button class="login_btn" size="default" type="primary" @click="regisiter">注册</button>
     </div>
 </template>
 
 <script>
 import api from '../../utils/api';
+// import config from '../../config.js'
 
 export default {
   data () {
@@ -49,7 +35,11 @@ export default {
         username:'',
         authCode: '',
         password: '',
+        type: '',
+        againPwd: '',
         showTopTips: false,
+        tips: '',
+        osType: '',
     }
   },
 
@@ -58,54 +48,61 @@ export default {
   },
 
   methods: {
-        getuserName(e){
-            
-            this.username = e.target.value;
-            console.log( this.username, "this.username" )
-        },
-        getauthCode(e){
-            this.authCode = e.target.value;
-        },
         getPwd(e){
             this.password = e.target.value;
         },
         getAgainPwd(e){
-            let againPwd = e.target.value;
-            if( this.password != againPwd ){
-                this.showTopTipsFun();
-            }else{
-                this.password = e.target.value;              
-            }
-            //   this.username = e.target.value;
+            
+              this.againPwd = e.target.value;
         },
-        showTopTipsFun() {
+        showTopTipsFun(tipStr) {
             this.showTopTips = true;
+            this.tips = tipStr;
             setTimeout(() => {
                 this.showTopTips = false;
+                this.tips = "";
             }, 2000)
         },
-        async sendAuthCode(){
-            let params = {
-                phone: this.username,
-                type: 1,
-                verifyCode: '',
+        regisiter(){
+            if( this.password != this.againPwd ){
+                this.showTopTipsFun("两次密码不一样！");
+            }else{
+                wx.login({
+                    success: (code) => {
+                        let params = {
+                            userName: this.username,
+                            userPwd: this.password,
+                            authCode: this.authCode,
+                            type: this.type,
+                            code: code.code,
+                            osType: this.osType,
+                        };
+                        const res = api.queryRegister(params);   
+                        if( res.code == "200" ){
+                            
+                        }
+                    }
+                })   
             }
-            const res = await api.querySendCode(params);
-            console.log( res, "resres" )
-        },
-        async regisiter(){
-            let params = {
-                userName: this.username,
-                userPwd: this.password,
-                authCode: this.authCode,
-                type: 1,
-            }
-            const res = await api.queryRegister(params)
+            
+            
         }
   },
 
   created () {
     // 调用应用实例的方法获取全局数据
+  },
+  onLoad(){
+        let queryObj = this.$root.$mp.query;
+        this.username = queryObj.username;
+        this.authCode = queryObj.authcode;
+        this.type = queryObj.type;
+        var res = wx.getSystemInfoSync()
+        if( res.platform == "ios" ){
+            this.osType = 2;
+        }else if( res.platform == "android" ){
+            this.osType = 1;
+        }
   }
 }
 </script>

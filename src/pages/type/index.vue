@@ -12,16 +12,16 @@
 	  	<div class="swiper-cont">
 		    <div v-for="(item, index) in typeList" :key="index" :class="currentTab==index ? 'swiper-cont-list cur' : 'swiper-cont-list'">
                 <div class="weui-panel__bd" v-for="(detailItem, detailIndex) in goodsList" :key="detailIndex">
-                    <navigator url="/pages/goods_detail/main" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+                    <a @click="gotoDetail(detailItem)" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
                         <div class="weui-media-box__hd weui-media-box__hd_in-appmsg">
-                            <image class="weui-media-box__thumb" :src=" 'https://www.baoyanmall.cn' + detailItem.thum_bnail_image_url" />
+                            <image class="weui-media-box__thumb" :src=" baseUrl + detailItem.thum_bnail_image_url" />
                         </div>
                         <div class="weui-media-box__bd weui-media-box__bd_in-appmsg">
                             <div class="weui-media-box__title">{{detailItem.commodity_name}}</div>
                             <div class="weui-media-box__desc">{{detailItem.valid}}</div>
                             <div class="price">¥{{detailItem.terminalPrice}}</div> 
                         </div>
-                    </navigator>
+                    </a>
                 </div>
 		    </div>
 	  	</div>
@@ -31,6 +31,7 @@
 <script>
 import base64 from '../../../static/images/base64';
 import api from '../../utils/api';
+
 export default {
     
     data () {
@@ -40,6 +41,7 @@ export default {
             // icon60: base64.icon60,
             typeList: [],
             goodsList: [],
+            baseUrl:  this.$baseUrl
         }
     },
     methods: {
@@ -55,11 +57,18 @@ export default {
         bindChange (e) {
             this.currentTab = e.target.current
         },
+        gotoDetail(obj){
+            console.log( obj, "obj" )
+            let dataStr = JSON.stringify(obj);
+            const url = `../goods_detail/main?data=${dataStr}`;
+            wx.navigateTo({url});
+        },
         async getTypeData(){
             const res = await api.queryNewBusinessComPany({})
             if( res.code == "200" ){
                 let dataList = res.result;
                 this.typeList = dataList;
+                // console.log( dataList, "datalist" )
                 this.getGoodsList(this.typeList[0]);
             }
         },
@@ -73,11 +82,13 @@ export default {
                 }
             const res = await api.queryMaxTypeCommoDity(params)
             if( res.code == "200" ){
+                console.log(res.result, "res.result")
                 this.goodsList = res.result;
             }
         },
     },
     onShow() {
+        this.currentTab = 0,
         this.getTypeData();
     }
   
