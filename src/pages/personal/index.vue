@@ -8,7 +8,10 @@
         <p v-else>
           <a href="/pages/login/main">登录</a>
         </p> -->
-        <p>
+        <p v-if="userInfo.userName">
+          {{userInfo.userName}}
+        </p>
+        <p v-else>
           <a href="/pages/login/main">登录</a>
         </p>
       </div>
@@ -88,12 +91,13 @@ export default {
 
   created () {
     // 调用应用实例的方法获取全局数据
-    this.getUserInfo()
+    // this.getUserInfo()
     
   },
   onLoad(){
     let storageObj =  wx.getStorageSync("loginInfo"); 
-    console.log( storageObj, "storageObj" )
+    console.log( storageObj, 'storageObj' )
+    this.userInfo = storageObj;
   }
 }
 </script>
