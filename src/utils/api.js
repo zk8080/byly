@@ -69,7 +69,49 @@ const api = {
                     console.log(err)
                 })
         })
-    }
+    },
+
+    //卡券购买接口
+    queryCarCouponIndentDispose: (req) => {
+        req = qs.stringify(req);
+        return new Promise( resolve => {
+            requert.post( "/ident/wxCarCouponIndentDispose", req )
+                .then( res => {
+                    resolve(res)
+                } )
+                .catch( err => {
+                    console.log(err)
+                })
+        })
+    },
+
+    //微信支付接口
+    queryPay: (req) => {
+        req = qs.stringify(req);
+        return new Promise( resolve => {
+            requert.post( "/pay/paySign", req )
+                .then( res => {
+                    resolve(res)
+                } )
+                .catch( err => {
+                    console.log(err)
+                })
+        })
+    },
+
+    //卡券二维码接口
+    queryDynamicCode: (req) => {
+        req = qs.stringify(req);
+        return new Promise( resolve => {
+            requert.post( "/Code/queryDynamicCode", req )
+                .then( res => {
+                    resolve(res)
+                } )
+                .catch( err => {
+                    console.log(err)
+                })
+        })
+    },
 }
 
 export default api;

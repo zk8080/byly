@@ -14,7 +14,7 @@
                     <input class="weui-input" type="number" @change="getauthCode" name="authCode" placeholder="请输入验证码"/>
                 </div>
                 <div class="weui-cell__ft">
-                   <button class="weui-vcode-btn" @click="getAuthCode">{{time}}</button>
+                   <button class="weui-vcode-btn" :disabled="disabled" @click="getAuthCode"  data-statu="open">{{time}}</button>
                    <!-- <input class="weui-vcode-btn" type="button" :disabled="disabled" @click="getAuthCode" v-model.lazy="time" /> -->
                 </div>
             </div>
@@ -40,16 +40,36 @@
                 </div>
             </div>
         </div> -->
-        <modal :hidden="showModal" title="填写图形码" confirm-text="确定" cancel-text="返回" @cancel="cancel" @confirm="sendAuthCode">
+        <!-- <modal :hidden="showModal" title="填写图形码" confirm-text="确定" cancel-text="返回" @cancel="cancel" @confirm="sendAuthCode">
             <div class="modal-wrap">
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" @change="getVerifyCode" name="verifyCode" placeholder="请输入图形码"/>
+                    <input class="weui-input" type="text" @change="getVerifyCode" name="verifyCode" v-model="verifyCode" placeholder="请输入图形码"/>
                 </div>
                 <div class="weui-cell__ft">
                     <img :src="'data:image/png;base64,' + imgCode" />
                 </div>
             </div>
-        </modal>
+        </modal> -->
+        <!--mask-->
+        <div class="drawer_screen" @click="powerDrawer" data-statu="close" v-if="showModal"></div> 
+        <!--content-->
+        <!--使用animation属性指定需要执行的动画-->
+        <div :animation="animationData" class="drawer_box" v-if="showModal"> 
+        
+        <!--drawer content-->
+            <div class="drawer_title">填写图形码</div> 
+            <div class="drawer_content"> 
+                <div class="modal-wrap">
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="text" @change="getVerifyCode" name="verifyCode" v-model="verifyCode" placeholder="请输入图形码"/>
+                    </div>
+                    <div class="weui-cell__ft">
+                        <img :src="'data:image/png;base64,' + imgCode" />
+                    </div>
+                </div>
+            </div> 
+            <div class="btn_ok" @click="sendAuthCode" data-statu="close">确定</div> 
+        </div>
     </div>
 </template>
 
@@ -69,8 +89,10 @@ export default {
         currentTime: 61,
         disabled: false,
         imgCode: '',
-        showModal: true,
+        showModal: false,
         verifyCode: '',
+        animationData: {},
+        animation: '',
     }
   },
 
@@ -96,14 +118,12 @@ export default {
             this.verifyCode = e.target.value;
         },
         showTime(){
-            console.log( 111 )
             let currentTime = this.currentTime;
             let interval;
-            interval = setInterval(function () {
-                console.log(222)
+            interval = setInterval(() => {
                 currentTime--;
                 this.time = currentTime+'秒';
-                console.log( this.time, "this.time" )
+
                 if (currentTime <= 0) {
                     clearInterval(interval)
                     this.time = '重新发送',
@@ -123,39 +143,90 @@ export default {
         cancel(){
             this.showModal = true;
         },
-        // //点击弹窗确认按钮 发送请求发送验证码
-        // async sendAuthCode(){
-        //     console.log( 111 )
-        //     let params = {
-        //         phone: this.username,
-        //         type: this.type,
-        //         verifyCode: this.verifyCode,
-        //     }
-        //     const res = await api.querySendCode(params);
-        //     console.log( res, "resres" )
-        //     if( res.code == "200" ){
+        powerDrawer: function (e) { 
+            var currentStatu = e.currentTarget.dataset.statu;  
+            this.util(currentStatu); 
+        }, 
+        util: function(currentStatu){ 
+            /* 动画部分 */ 
+            // 第1步：创建动画实例   
+            var animation = wx.createAnimation({ 
+                duration: 200,  //动画时长  
+                timingFunction: "linear", //线性  
+                delay: 0  //0则不延迟  
+            });  
+            
+            // 第2步：这个动画实例赋给当前的动画实例  
+            this.animation = animation;  
+        
+            // 第3步：执行第一组动画  
+            animation.opacity(0).rotateX(-100).step();  
+        
+            // 第4步：导出动画对象赋给数据对象储存  
 
-        //     }
-        // },
-        // //点击获取验证码按钮 获取图形码
-        // async getAuthCode(){
-        //     // this.disabled = true;
-        //     // this.showTime();
-        //     // console.log( this.time, "this.time" )
-        //     let params = {
-        //         phone: this.username,
-        //         type: this.type,
-        //         verifyCode: '',
-        //     }
-        //     const res = await api.querySendCode(params);
-        //     if( res.code == "200" ){
-        //         let imgUrl = res.result.value;
-        //         //清除base64格式中的空格及换行
-        //         imgUrl = imgUrl.replace(/[\r\n]/g, "");
-        //         this.imgCode = imgUrl;
-        //         this.showModal = false;
-        //     }
-        // },
+            this.animationData = animation.export() 
+            
+            // 第5步：设置定时器到指定时候后，执行第二组动画  
+            setTimeout(function () { 
+                // 执行第二组动画  
+                animation.opacity(1).rotateX(0).step();  
+                // 给数据对象储存的第一组动画，更替为执行完第二组动画的动画对象  
+                this.animationData = animation  
+                
+                //关闭  
+                if (currentStatu == "close") { 
+                    this.showModal = false; 
+                } 
+            }.bind(this), 200) 
+            
+            // 显示  
+            if (currentStatu == "open") { 
+                this.showModal = true; 
+            } 
+        }, 
+        //点击弹窗确认按钮 发送请求发送验证码
+        async sendAuthCode(){
+            this.util("close");
+            let params = {
+                phone: this.username,
+                type: this.type,
+                verifyCode: this.verifyCode,
+            }
+            const res = await api.querySendCode(params);
+            if( res.code == "200" ){
+                this.disabled = true;
+                this.showTime();
+                
+            }else{
+                this.showTopTipsFun(res.message);
+            }
+        },
+        //点击获取验证码按钮 获取图形码
+        async getAuthCode(){
+            
+            if(this.username == '' ){
+                this.showTopTipsFun('请输入手机号！')
+            }else{
+                let params = {
+                    phone: this.username,
+                    type: this.type,
+                    verifyCode: '',
+                }
+                const res = await api.querySendCode(params);
+                if( res.code == "200" ){
+                    let imgUrl = res.result.value;
+                    //清除base64格式中的空格及换行
+                    imgUrl = imgUrl.replace(/[\r\n]/g, "");
+                    this.imgCode = imgUrl;
+                    this.verifyCode = "";
+                    // this.showModal = false;
+                    this.util("open");
+                }else{
+                    this.showTopTipsFun(res.message);
+                }
+            }
+            
+        },
         //下一步按钮
         async VerifiCode(){
             if(this.username == '' ){
@@ -184,7 +255,11 @@ export default {
   created () {
     // 调用应用实例的方法获取全局数据
   },
+  onshow(){
+      this.showModal = false;
+  },
   onLoad(){
+      this.showModal = false;
       this.type = this.$root.$mp.query.type;
   }
 }
@@ -249,5 +324,91 @@ export default {
     display: flex;
     align-items: center;
 }
+/*mask*/
+.drawer_screen { 
+ width: 100%; 
+ height: 100%; 
+ position: fixed; 
+ top: 0; 
+ left: 0; 
+ z-index: 1000; 
+ background: #000; 
+ opacity: 0.5; 
+ overflow: hidden; 
+} 
+  
+/*content*/
+.drawer_box { 
+ width: 80%; 
+ overflow: hidden; 
+ position: fixed; 
+ top: 50%; 
+ left: 0; 
+ z-index: 1001; 
+ background: #FAFAFA; 
+ margin: -150px 50rpx 0 50rpx; 
+ border-radius: 3px; 
+} 
+  
+.drawer_title{ 
+ padding:15px; 
+ font: 20px "microsoft yahei"; 
+ text-align: center; 
+} 
+.drawer_content { 
+ /* height: 210px;  */
+ overflow-y: scroll; /*超出父盒子高度可滚动*/
+ padding: 10px;
+} 
+  
+.btn_ok{ 
+ padding: 10px; 
+ font: 20px "microsoft yahei"; 
+ text-align: center; 
+ border-top: 1px solid #E8E8EA; 
+ color: #3CC51F; 
+} 
+  
+.top{ 
+ padding-top:8px; 
+} 
+.bottom { 
+ padding-bottom:8px; 
+} 
+.title { 
+ height: 30px; 
+ line-height: 30px; 
+ width: 160rpx; 
+ text-align: center; 
+ display: inline-block; 
+ font: 300 28rpx/30px "microsoft yahei"; 
+} 
+  
+.input_base { 
+ border: 2rpx solid #ccc; 
+ padding-left: 10rpx; 
+ margin-right: 50rpx; 
+} 
+.input_h30{ 
+ height: 30px; 
+ line-height: 30px; 
+} 
+.input_h60{ 
+ height: 60px; 
+} 
+.input_view{ 
+ font: 12px "microsoft yahei"; 
+ background: #fff; 
+ color:#000; 
+ line-height: 30px; 
+} 
 
+radio{ 
+ margin-right: 20px; 
+} 
+.grid { display: -webkit-box; display: box; } 
+.col-0 {-webkit-box-flex:0;box-flex:0;} 
+.col-1 {-webkit-box-flex:1;box-flex:1;} 
+.fl { float: left;} 
+.fr { float: right;}
 </style>

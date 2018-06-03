@@ -75,7 +75,7 @@ export default {
       // 调用登录接口
       wx.login({
         success: (code) => {
-          console.log( code, "https://byloft.top" )
+          // console.log( code, "https://byloft.top" )
           wx.getUserInfo({
             success: (res) => {
               this.userInfo = res.userInfo
@@ -94,7 +94,7 @@ export default {
     // this.getUserInfo()
     
   },
-  onLoad(){
+  onShow(){
     let storageObj =  wx.getStorageSync("loginInfo"); 
     console.log( storageObj, 'storageObj' )
     this.userInfo = storageObj;

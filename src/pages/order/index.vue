@@ -1,6 +1,7 @@
 <template>
   <div class="page">
-    <div class="page__bd">
+    
+    <div v-if="userInfo" class="page__bd">
       <div class="weui-tab">
         <div class="weui-navbar">
           <block v-for="(item,index) in tabs" :key="index">
@@ -11,16 +12,15 @@
           <div class="weui-navbar__slider" :class="navbarSliderClass"></div>
         </div>
         <div class="weui-tab__panel">
-          <!-- <div class="weui-tab__content" :hidden="activeIndex != 0">
-            <orderCard  :orderData=""></orderCard>
-          </div>
-          <div class="weui-tab__content" :hidden="activeIndex != 1">待使用</div>
-          <div class="weui-tab__content" :hidden="activeIndex != 2">已使用</div> -->
           <div class="weui-tab__content" v-for="(item, index) in orderList" :key="index" :hidden="activeIndex != index">
               <orderCard v-for="( orderItem, orderIndex ) in item.orderDetailList" :key="orderIndex"  :orderData="orderItem"></orderCard>
           </div>
         </div>
       </div>
+    </div>
+    <div class="no_order" v-else>
+        <p>您还没有登录，请登录后查看订单</p>
+        <a href="/pages/login/main">登录</a>
     </div>
   </div>
 </template>
@@ -34,6 +34,7 @@ import api from '../../utils/api'
 export default {
   data() {
     return {
+      userInfo: {},
       tabs: ["未使用", "已使用", "已过期"],
       activeIndex: 0,
       fontSize: 30,
@@ -70,9 +71,12 @@ export default {
     // }
   },
   mounted(){
-    // this.getData();
-    // console.log( res, "resresres1111" )
+    
   },
+  onShow(){
+    let storageObj =  wx.getStorageSync("loginInfo"); 
+    this.userInfo = storageObj;
+  }
 
 }
 </script>
@@ -105,5 +109,20 @@ page,
 .weui-navbar__slider_2 {
   left:29rpx;
   transform: translateX(500rpx);
+}
+.no_order{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.no_order a{
+  display: block;
+  padding: 5px 20px;
+  background-color: #119a26;
+  color: #fff;
+  border-radius: 2px;
+  margin-top: 10px;
 }
 </style>

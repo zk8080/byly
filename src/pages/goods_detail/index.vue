@@ -3,7 +3,7 @@
         <swiper indicator-dots="true"
             autoplay="true">
             <swiper-item v-for=" (item, index) in scroll_imgList" :key="index">
-                <image :lazy-load="lazy" :src="baseUrl + item.imageUrl" class="slide-image" width="355" height="150"/>
+                <image :lazy-load="lazy" :src="baseUrl + item.imageUrl" class="slide-image"/>
             </swiper-item>
         </swiper>
         <div class="goods_header">
@@ -34,7 +34,7 @@
                     <div class="num-input fr clearfix">
                         <div>
                             <img src="/static/images/jian.png" @click='jian'/>
-                            <input disabled='true' name="num" :value='orderNum'/>
+                            <input disabled='true' name="num" :value='commoDityCount'/>
                             <img src="/static/images/add.png" @click='add'/>
                         </div>
                     </div>  
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import api from '../../utils/api.js'
 export default {
     data() {
         return {
@@ -62,7 +63,8 @@ export default {
             orderEnd: false,
             showFullPage: false,
             lazy: true,
-            orderNum: 1,
+            commoDityCount: 1,
+            userInfo: {},
         }
     },
     computed: {
@@ -79,29 +81,59 @@ export default {
             this.showFullPage = false;
             this.orderShow = false;
             this.orderEnd = false;
+            this.commoDityCount = 1;
         },
         jian: function () {
-            var _this = this;
-            if (_this.orderNum <= 1){
-                _this.orderNum = 1;
+            if (this.commoDityCount <= 1){
+                this.commoDityCount = 1;
             }else{
             
-                var num = _this.orderNum - 1;
-                _this.orderNum = num;
+                var num = this.commoDityCount - 1;
+                this.commoDityCount = num;
             }
             
         },
         add: function () {
-            // console.log(111)
-            var _this = this;
-            var num = _this.orderNum + 1;
-            _this.orderNum = num;
+            this.commoDityCount ++;
         },
         gotoPay(){
-            wx.navigateTo({
-                url: '../msg-success/main'
+            wx.login({
+                success: (code) => {
+                    let params = {
+                        businessId: this.dataList.business_company_id,
+                        userId: this.userInfo.userId,
+                        acessToken: this.userInfo.acessToken,
+                        userKey: this.userInfo.userKey,
+                        commoDityCount: this.commoDityCount,
+                        code: code.code,
+                        commoDityId: this.dataList.commodity_id,
+                        carType: this.dataList.commodity_distinction,
+                    }
+                    api.queryCarCouponIndentDispose(params)
+                        .then( res => {
+                            // console.log(res, "res")
+                            if( res.code == "200" ){
+                                let params = {
+                                    userId: this.userInfo.userId,
+                                    acessToken: this.userInfo.acessToken,
+                                    userKey: this.userInfo.userKey,
+                                }
+                                api.queryPay(params)
+                                    .then( res => {
+                                        
+                                    })
+                            }
+                        })
+                }
             })
+            
+            // api.queryCarCouponIndentDispose()
         },
+    },
+    onShow(){
+        let storageObj =  wx.getStorageSync("loginInfo"); 
+        console.log( storageObj, 'storageObj' )
+        this.userInfo = storageObj;
     },
     onLoad(){
         let data = this.$root.$mp.query.data;
@@ -111,6 +143,7 @@ export default {
         this.dataList = data;
         this.scroll_imgList = imgList;
         this.describeImg = describe_image_url;
+        
     }
 }
 </script>
@@ -127,7 +160,7 @@ export default {
     width: 100%;
     height: 220px;
 }
-swiper-item img{
+swiper-item image{
     width: 100%;
     height: 240px;
 }
