@@ -1,9 +1,10 @@
 <template>
     <div :class="showFullPage?'container cur':'container'">
+        <div class="weui-toptips weui-toptips_warn" v-if="showTopTips">{{tips}}</div>
         <swiper indicator-dots="true"
             autoplay="true">
             <swiper-item v-for=" (item, index) in scroll_imgList" :key="index">
-                <image :lazy-load="lazy" :src="baseUrl + item.imageUrl" class="slide-image"/>
+                <image :src="baseUrl + item.imageUrl" class="slide-image"/>
             </swiper-item>
         </swiper>
         <div class="goods_header">
@@ -22,13 +23,29 @@
             <span>支持微信支付</span>
         </div>
         <div class="describe" v-for="(item, index) in describeImg" :key="index">
-            <image mode="widthFix" :lazy-load="lazy"  :src="baseUrl + item.imageUrl" alt="" />
+            <image mode="widthFix"  :src="baseUrl + item.imageUrl" alt="" />
         </div>
         <div :class='showFullPage? "show fullpage ": "hide fullpage"' @click='close'>
             
         </div>
         <div class="order">
             <div :class='orderShow? "order-detail on": "order-detail"'>
+                <div class="recommend-user" v-if="dataList.commodity_type_id == '228'">
+                    <text>推荐人</text>
+                    <div class="recommend-input">
+                        <div>
+                            <input type="text" name="carRecommendBusinessName" @change="getRecommendBusiness" placeholder="请输入推荐人"/>
+                        </div>
+                    </div>  
+                </div>
+                <div class="recommend-business" v-if="dataList.commodity_type_id == '228'"> 
+                    <text>门店</text>
+                    <div class="recommend-input">
+                        <div>
+                            <input type="text" name="carRecommendUser" @change="getRecommendUser" placeholder="请输入门店"/>
+                        </div>
+                    </div>  
+                </div>
                 <div class="order-num clearfix">
                     <text class="fl">数量</text>
                     <div class="num-input fr clearfix">
@@ -52,6 +69,7 @@
 
 <script>
 import api from '../../utils/api.js'
+import qs from 'qs';
 export default {
     data() {
         return {
@@ -65,6 +83,10 @@ export default {
             lazy: true,
             commoDityCount: 1,
             userInfo: {},
+            carRecommendUser: '',
+            carRecommendBusinessName: '',
+            showTopTips: false,
+            tips: '',
         }
     },
     computed: {
@@ -96,46 +118,128 @@ export default {
         add: function () {
             this.commoDityCount ++;
         },
+        getRecommendBusiness: function (e) {
+            this.carRecommendBusinessName = e.target.value;
+        },
+        getRecommendUser: function (e) {
+            this.carRecommendUser = e.target.value;
+        },
+        showTopTipsFun(tipStr) {
+            this.showTopTips = true;
+            this.tips = tipStr;
+            setTimeout(() => {
+                this.showTopTips = false;
+                this.tips = "";
+            }, 2000)
+        },
         gotoPay(){
-            wx.login({
-                success: (code) => {
-                    let params = {
-                        businessId: this.dataList.business_company_id,
-                        userId: this.userInfo.userId,
-                        acessToken: this.userInfo.acessToken,
-                        userKey: this.userInfo.userKey,
-                        commoDityCount: this.commoDityCount,
-                        code: code.code,
-                        commoDityId: this.dataList.commodity_id,
-                        carType: this.dataList.commodity_distinction,
+            if( this.userInfo.userId ){
+                if( this.dataList.commodity_type_id == '228' ){
+                    console.log(111)
+                    if( this.carRecommendBusinessName == '' || this.carRecommendUser == '' ){
+                        console.log(222);
+                        this.showTopTipsFun('推荐人或者推荐店铺不能为空');
+                        return;
                     }
-                    api.queryCarCouponIndentDispose(params)
-                        .then( res => {
-                            // console.log(res, "res")
-                            if( res.code == "200" ){
-                                let params = {
-                                    userId: this.userInfo.userId,
-                                    acessToken: this.userInfo.acessToken,
-                                    userKey: this.userInfo.userKey,
-                                }
-                                api.queryPay(params)
-                                    .then( res => {
-                                        
-                                    })
+                }
+                wx.login({
+                    success: (code) => {
+                        let params = '';
+                        let jsons = {
+                                businessId: this.dataList.business_company_id,
+                                userId: this.userInfo.userId,
+                                acessToken: this.userInfo.acessToken,
+                                userkey: this.userInfo.userKey,
+                                commoDityCount: this.commoDityCount,
+                                code: code.code,
+                                commoDityId: this.dataList.commodity_id,
+                                carType: this.dataList.commodity_distinction,
+                                carRecommendBusinessName: this.carRecommendBusinessName,
+                                carRecommendUser: this.carRecommendUser,
                             }
-                        })
+                        //将对象转成json字符串， 不然后台无法拿到参数 参数会变成jsons[key]=value 后台需要jsons={key:value}
+                        jsons = JSON.stringify(jsons);                            
+                        params = {
+                            'jsons': jsons
+                        }
+                        // let jsons = "0000";
+                        api.queryCarCouponIndentDispose(params)
+                            .then( res => {
+                                // console.log(res, "res")
+                                if( res.code == "200" ){
+                                    let result = res.result;
+                                    let jsonsData = {
+                                            userId: this.userInfo.userId,
+                                            acessToken: this.userInfo.acessToken,
+                                            userkey: this.userInfo.userKey,
+                                            indentId: result.indentId,
+                                            indentKey: result.indentKey,
+                                            indentOddnumbers: result.indentoddnumbers
+                                        }
+                                    jsonsData = JSON.stringify(jsonsData);
+                                    let params = {
+                                        "jsons": jsonsData,
+                                        type: "1",
+                                    }
+                                    api.queryPay(params)
+                                        .then( res => {
+                                            if( res.code == "200" ){
+                                                let dataObj = res.result;
+                                                this.pay(dataObj);
+                                            }
+                                        })
+                                }else{
+                                    let errStr = res.message;
+                                    wx.showToast({
+                                        title: errStr,
+                                        icon: 'none',
+                                        duration: 2000//持续的时间
+                                    })
+                                }
+                            })
+                    }
+                })
+            }else{
+                const url = "../login/main";
+                wx.navigateTo({ url });
+            }
+        },
+        pay(obj){
+            console.log(3233)
+            wx.requestPayment({
+                'timeStamp': obj.timestamp,
+                'nonceStr': obj.noncestr,
+                'package': obj.package,
+                'signType': 'MD5',
+                'paySign': obj.paySign,
+                'success': function (res) {
+                    wx.showToast({
+                        title: '支付成功',
+                        icon: 'success',
+                        duration: 2000
+                    })
+                },
+                'fail': function (res) {
+                    console.log(res, 'err')
                 }
             })
-            
-            // api.queryCarCouponIndentDispose()
-        },
+        }
     },
     onShow(){
         let storageObj =  wx.getStorageSync("loginInfo"); 
-        console.log( storageObj, 'storageObj' )
         this.userInfo = storageObj;
+        this.orderShow = false;
+        this.showFullPage = false;
+        this.orderEnd = false;
+        this.commoDityCount = 1;
     },
     onLoad(){
+        let storageObj =  wx.getStorageSync("loginInfo"); 
+        this.userInfo = storageObj;
+        this.showFullPage = false;
+        this.orderShow = false;
+        this.orderEnd = false;
+        this.commoDityCount = 1;
         let data = this.$root.$mp.query.data;
         data = JSON.parse(data);
         let imgList = JSON.parse(data.scroll_image_url);
@@ -143,7 +247,6 @@ export default {
         this.dataList = data;
         this.scroll_imgList = imgList;
         this.describeImg = describe_image_url;
-        
     }
 }
 </script>
@@ -274,7 +377,7 @@ swiper-item image{
 }
 .order{
   width: 100%;
-  height: 350rpx;
+  height: 200px;
   position: fixed;
   left: 0;
   bottom: 0;
@@ -334,5 +437,25 @@ swiper-item image{
 }
 .hide{
   display: none;
+}
+.recommend-user{
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+}
+.recommend-business{
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+}
+.recommend-user text{
+    width: 60px;
+}
+.recommend-business text{
+    width: 60px;
+}
+.recommend-input {
+    flex: 1;
+    margin-left: 10px;
 }
 </style>

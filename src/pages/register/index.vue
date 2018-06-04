@@ -77,10 +77,28 @@ export default {
                             code: code.code,
                             osType: this.osType,
                         };
-                        const res = api.queryRegister(params);   
-                        if( res.code == "200" ){
-                            
-                        }
+                        api.queryRegister(params)
+                            .then( res => {
+                                if( res.code == "200" ){
+                                    let successStr = res.message;
+                                    wx.showToast({
+                                        title: successStr,
+                                        icon: 'none',
+                                        duration: 2000//持续的时间
+                                    })
+                                }else{
+                                    let errStr = res.message;
+                                    wx.showToast({
+                                        title: errStr,
+                                        icon: 'none',
+                                        duration: 2000//持续的时间
+                                    })
+                                }
+                            })
+                            .catch( err => {
+                                console.log(err)
+                            })   
+                        
                     }
                 })   
             }

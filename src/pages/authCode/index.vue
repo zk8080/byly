@@ -198,7 +198,13 @@ export default {
                 this.showTime();
                 
             }else{
-                this.showTopTipsFun(res.message);
+                // this.showTopTipsFun(res.message);
+                let errStr = res.message;
+                wx.showToast({
+                    title: errStr,
+                    icon: 'none',
+                    duration: 2000//持续的时间
+                })
             }
         },
         //点击获取验证码按钮 获取图形码
@@ -222,7 +228,12 @@ export default {
                     // this.showModal = false;
                     this.util("open");
                 }else{
-                    this.showTopTipsFun(res.message);
+                    let errStr = res.message;
+                    wx.showToast({
+                        title: errStr,
+                        icon: 'none',
+                        duration: 2000//持续的时间
+                    })
                 }
             }
             
@@ -240,13 +251,13 @@ export default {
                     type: this.type,
                     verifyCode: this.authCode,
                 }
-                // const res = await api.querySendCode(params);
+                const res = await api.querySendCode(params);
                 
-                // console.log( res, "resresresres" )
-                // if( res.code == "200" ){
+                console.log( res, "resresresres" )
+                if( res.code == "200" ){
                     const url = `../register/main?type=${this.type}&username=${this.username}&authcode=${this.authCode}`
                     wx.navigateTo({ url })
-                // }
+                }
             }
             
         }

@@ -68,8 +68,8 @@ export default {
     },
     gotoOrder(){
 
-      const url = '../order/main'
-      wx.switchTab({ url })
+      const url = '../order/main';
+      wx.switchTab({ url });
     },
     getUserInfo () {
       // 调用登录接口
@@ -96,8 +96,10 @@ export default {
   },
   onShow(){
     let storageObj =  wx.getStorageSync("loginInfo"); 
-    console.log( storageObj, 'storageObj' )
     this.userInfo = storageObj;
+  },
+  onLoad(){
+
   }
 }
 </script>

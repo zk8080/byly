@@ -74,8 +74,9 @@ const api = {
     //卡券购买接口
     queryCarCouponIndentDispose: (req) => {
         req = qs.stringify(req);
+        // console.log( req, "req" )
         return new Promise( resolve => {
-            requert.post( "/ident/wxCarCouponIndentDispose", req )
+            requert.post( "/ident/wxCarCouponIndentDispose", req)
                 .then( res => {
                     resolve(res)
                 } )
