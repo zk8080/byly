@@ -34,7 +34,7 @@
                     <text>推荐人</text>
                     <div class="recommend-input">
                         <div>
-                            <input type="text" name="carRecommendBusinessName" @change="getRecommendBusiness" placeholder="请输入推荐人"/>
+                            <input type="text" name="carRecommendBusinessName" :value="carRecommendBusinessName" @change="getRecommendBusiness" placeholder="请输入推荐人"/>
                         </div>
                     </div>  
                 </div>
@@ -42,7 +42,7 @@
                     <text>门店</text>
                     <div class="recommend-input">
                         <div>
-                            <input type="text" name="carRecommendUser" @change="getRecommendUser" placeholder="请输入门店"/>
+                            <input type="text" name="carRecommendUser" :value="carRecommendUser" @change="getRecommendUser" placeholder="请输入门店"/>
                         </div>
                     </div>  
                 </div>
@@ -94,7 +94,6 @@ export default {
     },
     methods: {
         open(){
-
             this.showFullPage = true;
             this.orderShow = true;
             this.orderEnd = true;
@@ -104,6 +103,8 @@ export default {
             this.orderShow = false;
             this.orderEnd = false;
             this.commoDityCount = 1;
+            this.carRecommendBusinessName = '';
+            this.carRecommendUser = "";
         },
         jian: function () {
             if (this.commoDityCount <= 1){
@@ -133,7 +134,7 @@ export default {
             }, 2000)
         },
         gotoPay(){
-            if( this.userInfo.userId ){
+            if( this.userInfo.deviceId ){
                 if( this.dataList.commodity_type_id == '228' ){
                     console.log(111)
                     if( this.carRecommendBusinessName == '' || this.carRecommendUser == '' ){
@@ -167,6 +168,7 @@ export default {
                             .then( res => {
                                 // console.log(res, "res")
                                 if( res.code == "200" ){
+                                    this.close();
                                     let result = res.result;
                                     let jsonsData = {
                                             userId: this.userInfo.userId,
@@ -179,7 +181,8 @@ export default {
                                     jsonsData = JSON.stringify(jsonsData);
                                     let params = {
                                         "jsons": jsonsData,
-                                        type: "1",
+                                        type: "2",
+                                        openid: this.userInfo.deviceId,
                                     }
                                     api.queryPay(params)
                                         .then( res => {
@@ -217,7 +220,8 @@ export default {
                         title: '支付成功',
                         icon: 'success',
                         duration: 2000
-                    })
+                    });
+                    this.close();
                 },
                 'fail': function (res) {
                     console.log(res, 'err')
@@ -232,6 +236,8 @@ export default {
         this.showFullPage = false;
         this.orderEnd = false;
         this.commoDityCount = 1;
+        this.carRecommendBusinessName = '';
+        this.carRecommendUser = "";
     },
     onLoad(){
         let storageObj =  wx.getStorageSync("loginInfo"); 
@@ -240,6 +246,8 @@ export default {
         this.orderShow = false;
         this.orderEnd = false;
         this.commoDityCount = 1;
+        this.carRecommendBusinessName = '';
+        this.carRecommendUser = "";
         let data = this.$root.$mp.query.data;
         data = JSON.parse(data);
         let imgList = JSON.parse(data.scroll_image_url);

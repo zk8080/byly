@@ -10,18 +10,18 @@
         </div>
         <div class="weui-msg__opr-area">
             <div class="weui-btn-area">
-                <button class="weui-btn" type="primary" @click="gotoOrder">查看卡券二维码</button>
+                <button class="weui-btn" type="primary" @click="gotoOrder">查看订单</button>
                 <button class="weui-btn" type="default" @click="gotoIndex">返回首页</button>
             </div>
         </div>
-        <div class="weui-msg__extra-area">
+        <!-- <div class="weui-msg__extra-area">
             <div class="weui-footer">
                 <div class="weui-footer__links">
                     <navigator url="" class="weui-footer__link">底部链接文本</navigator>
                 </div>
                 <div class="weui-footer__text">Copyright © 2008-2018 weui.io</div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 </template>

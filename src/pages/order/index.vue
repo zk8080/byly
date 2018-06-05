@@ -5,15 +5,21 @@
       <div class="weui-tab">
         <div class="weui-navbar">
           <block v-for="(item,index) in tabs" :key="index">
-            <div :id="index" :class="{'weui-bar__item_on':activeIndex == index}" class="weui-navbar__item" @click="tabClick">
+            <div :id="index" :class="activeIndex == index? 'weui-navbar__item weui-bar__item_on': 'weui-navbar__item'" @click="tabClick">
               <div class="weui-navbar__title">{{item}}</div>
             </div>
           </block>
           <div class="weui-navbar__slider" :class="navbarSliderClass"></div>
         </div>
         <div class="weui-tab__panel">
-          <div class="weui-tab__content" v-for="(item, index) in orderList" :key="index" :hidden="activeIndex != index">
-              <orderCard v-for="( orderItem, orderIndex ) in item.orderDetailList" :key="orderIndex"  :orderData="orderItem"></orderCard>
+          <div class="weui-tab__content"  :hidden="activeIndex != 0">
+              <orderCard v-for="( orderItem, orderIndex ) in orderList" :key="orderIndex"  :orderData="orderItem" :aging="aging"></orderCard>
+          </div>
+          <div class="weui-tab__content"  :hidden="activeIndex != 1">
+              <orderCard v-for="( orderItem, orderIndex ) in orderList" :key="orderIndex"  :orderData="orderItem" :aging="aging"></orderCard>
+          </div>
+          <div class="weui-tab__content"  :hidden="activeIndex != 2">
+              <orderCard v-for="( orderItem, orderIndex ) in orderList" :key="orderIndex"  :orderData="orderItem" :aging="aging"></orderCard>
           </div>
         </div>
       </div>
@@ -38,9 +44,8 @@ export default {
       tabs: ["未使用", "已使用", "已过期"],
       activeIndex: 0,
       fontSize: 30,
-      orderList: [
-          
-      ]
+      orderList: [],
+      aging: '',
     }
   },
   components: {
@@ -63,12 +68,20 @@ export default {
     tabClick(e) {
       // console.log(e);
       this.activeIndex = e.currentTarget.id;
+      this.getData();
     },
-    // async getData(){
-    //   console.log( api,"apiapii" )
-    //   const res = await api.queryNewBusinessComPany({})
-    //   console.log( res, "paramsparams" )
-    // }
+    async getData(){
+      let status = parseInt(this.activeIndex) + 1;
+      let params = {
+        userId: '33',
+        employstatus: "1",
+      }
+      const res = await api.queryIndentStatus(params)
+      if( res.code == "200" ){
+        this.orderList = res.result.userCardCouponList;
+        this.aging = res.result.aging;
+      }
+    }
   },
   mounted(){
     
@@ -76,6 +89,7 @@ export default {
   onShow(){
     let storageObj =  wx.getStorageSync("loginInfo"); 
     this.userInfo = storageObj;
+    this.getData();
   }
 
 }

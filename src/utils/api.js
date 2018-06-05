@@ -90,7 +90,7 @@ const api = {
     queryPay: (req) => {
         req = qs.stringify(req);
         return new Promise( resolve => {
-            requert.post( "/pay/paySign", req )
+            requert.post( "/pay/wxPaySign", req )
                 .then( res => {
                     resolve(res)
                 } )
@@ -104,7 +104,21 @@ const api = {
     queryDynamicCode: (req) => {
         req = qs.stringify(req);
         return new Promise( resolve => {
-            requert.post( "/Code/queryDynamicCode", req )
+            requert.post( "/CoreUser/queryDynamicCode", req )
+                .then( res => {
+                    resolve(res)
+                } )
+                .catch( err => {
+                    console.log(err)
+                })
+        })
+    },
+
+    //订单查询接口
+    queryIndentStatus: (req) => {
+        req = qs.stringify(req);
+        return new Promise( resolve => {
+            requert.post( "/CoreUser/queryUserAllCoupon", req )
                 .then( res => {
                     resolve(res)
                 } )

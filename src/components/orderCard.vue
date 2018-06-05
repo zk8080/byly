@@ -1,31 +1,30 @@
 <template>
   <div>
     <div class="order-item">
-        <div class="header">
+        <!-- <div class="header">
             <text class="fl">订单编号：{{orderData.orderNo}}</text>
             <text class="fr">{{orderData.status}}</text>  
-        </div>
+        </div> -->
         <div class="order-detail">
             <div class="order-img">
                 <!-- <img src="" alt=""> -->
             </div>
             <div class="order-title">
-                <text class="title">{{orderData.title}}</text>
+                <text class="title">{{orderData.commodity_name}}</text>
                 <div class='totalprice'>
-                    <text class="num">{{orderData.orderNum}}张</text>
-                    
+                    <text class="num">{{orderData.commodity_describe}}</text>
                 </div>
             </div>
         </div>
         <div class="time">
-                <text>到期时间：{{orderData.time}}</text>
+                <text>{{orderData.time}}</text>
         </div>
-        <div class="address">
+        <!-- <div class="address">
                 <text>地址：{{orderData.address}}</text>
-        </div>
-        <a href="/pages/order_detail/main">
+        </div> -->
+        <a :href="'/pages/order_detail/main?cardId=' + orderData.cardId + '&aging=' + aging">
             <div class="ewm clearfix">
-              <text class="price">¥{{orderData.price}}</text>
+              <text class="price">¥{{orderData.commoDitycost}}</text>
               <text class="fr">查看二维码></text>
             </div>
         </a>
@@ -35,7 +34,7 @@
 
 <script>
 export default {
-  props: ['orderData']
+  props: ['orderData', 'aging']
 }
 </script>
 
