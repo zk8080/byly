@@ -6,7 +6,7 @@
         </div>
         <div class="weui-msg__text-area">
             <div class="weui-msg__title">支付成功</div>
-            <div class="weui-msg__desc">内容详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<navigator url="" class="weui-msg__link">文字链接</navigator></div>
+            <!-- <div class="weui-msg__desc">内容详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<navigator url="" class="weui-msg__link">文字链接</navigator></div> -->
         </div>
         <div class="weui-msg__opr-area">
             <div class="weui-btn-area">

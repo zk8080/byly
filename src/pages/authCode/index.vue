@@ -93,6 +93,7 @@ export default {
         verifyCode: '',
         animationData: {},
         animation: '',
+        timeInterval: ''
     }
   },
 
@@ -119,13 +120,12 @@ export default {
         },
         showTime(){
             let currentTime = this.currentTime;
-            let interval;
-            interval = setInterval(() => {
+            this.timeInterval = setInterval(() => {
                 currentTime--;
                 this.time = currentTime+'秒';
 
                 if (currentTime <= 0) {
-                    clearInterval(interval)
+                    clearInterval(this.timeInterval)
                     this.time = '重新发送',
                     this.currentTime = 61,
                     this.disabled = false;   
@@ -267,7 +267,11 @@ export default {
     // 调用应用实例的方法获取全局数据
   },
   onshow(){
-      this.showModal = false;
+        clearInterval(this.timeInterval);
+        this.showModal = false;
+        this.time = '获取二维码';
+        this.currentTime = 61;
+        this.disabled = false;
   },
   onLoad(){
       this.showModal = false;

@@ -6,7 +6,7 @@
           <p>{{dataObj.commodity_name}}</p>
         </div>
         <div class="price">
-          <p>{{dataObj.commoDitycost}}</p>
+          <p>价格：¥{{dataObj.commoDitycost}}</p>
         </div>
         <div class="ewm">
           <view class="canvas-box">
@@ -21,7 +21,11 @@
             <p>{{dataObj.commodity_describe}}</p>
         </div>
         <div class="timer">
-          <p>二维码仅可使用一次（{{timer}}s失效）</p>
+          <p v-if="errorFlag" class="error">
+            该二维码已失效，请重新查看二维码
+          </p> 
+          <p v-else>二维码仅可使用一次（{{timer}}s失效）</p>
+          
         </div>
         <!-- <div class="username">
             <text class="l-cont">姓名</text>
@@ -41,6 +45,7 @@
 import api from '../../utils/api.js';
 import QR from '../../utils/qrcode.js'
 
+
 export default {
   components: {
 
@@ -51,8 +56,10 @@ export default {
       userId: '',
       cardId: '',
       dataObj: {},
-      timer: '',
-      aging: '',
+      timer: 120,
+      aging: 120,
+      interval: '',
+      errorFlag: false,
     }
   },
   methods: {
@@ -67,9 +74,9 @@ export default {
       }
       const res = await api.queryDynamicCode(params);
       if( res.code == "200" ){
+        this.setTimer();
         this.dataObj = res.result;
         this.creatCanvas();
-        this.setTimer();
       }
     },
     //适配不同屏幕大小的canvas
@@ -118,16 +125,16 @@ export default {
     },
     setTimer: function(){
       let aging = this.aging;
-      console.log( aging, "aging" )
-      let interval;
-      interval = setInterval(() => {
+      // console.log( aging, "aging" )
+      this.interval = setInterval(() => {
           aging--;
           this.timer = aging;
           if (aging <= 0) {
-              clearInterval(interval)
+              clearInterval(this.interval)
               // this.time = '重新发送',
               // this.currentTime = 61,
               // this.disabled = false;   
+              this.errorFlag = true;
           }
       }, 1000)
     }
@@ -138,6 +145,8 @@ export default {
   onshow(){
     let storageObj =  wx.getStorageSync("loginInfo"); 
     this.cardId = storageObj.userId;
+    clearInterval(this.interval);
+    // this.aging = 120;
     this.getData();
   },
   onLoad(){
@@ -146,11 +155,14 @@ export default {
     let cardId = this.$root.$mp.query.cardId;
     this.cardId = cardId;
     let aging = this.$root.$mp.query.aging;
-    console.log( this.$root.$mp.query, "this.$root.$mp.query" )
-    this.aging = aging;
-    this.getData();
     
-  }
+    this.aging = aging;
+    this.timer = aging;
+    this.getData();
+  },
+  onUnload(){
+    clearInterval(this.interval);
+  },
 }
 </script>
 
@@ -217,6 +229,12 @@ export default {
 .detail-cont text{
   padding: 10rpx;
   font-size: 28rpx;
+}
+.price{
+  color: red;
+}
+.time{
+  color: #119a26;
 }
 .detail-cont .l-cont{
   display: inline-block;

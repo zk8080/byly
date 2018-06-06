@@ -27,8 +27,7 @@ export default {
         'pages/register/main', 
         'pages/goods_detail/main', 
         'pages/order_detail/main',
-        'pages/msg-success/main',
-        'pages/msg-fail/main',    
+        'pages/msg-success/main',    
         'pages/authCode/main',       
     ],
     window: {

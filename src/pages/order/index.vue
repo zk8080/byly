@@ -86,12 +86,15 @@ export default {
   mounted(){
     
   },
+  onHide (){
+    
+  },
   onShow(){
+    this.activeIndex = 0;
     let storageObj =  wx.getStorageSync("loginInfo"); 
     this.userInfo = storageObj;
     this.getData();
-  }
-
+  },
 }
 </script>
 

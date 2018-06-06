@@ -7,6 +7,6 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarTitleText: '订单详情'
+    navigationBarTitleText: '卡券二维码'
   }
 }

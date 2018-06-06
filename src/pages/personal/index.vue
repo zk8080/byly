@@ -28,7 +28,7 @@
         </a>
       </div>
       <div class="about">
-        <a href="/pages/order/main">
+        <a href="">
           <div>
             <img src="/static/images/about.png" alt="">
             <text>关于我们</text>
@@ -37,12 +37,17 @@
         </a>
       </div>
       <div class="hotline">
-        <a href="/pages/order/main">
+        <a href="">
           <div>
             <img src="/static/images/tel.png" alt="">
             <text>服务热线</text>
           </div>
         </a>
+      </div>
+      <div v-if="userInfo.userName" class="logout">
+          <div @click="logout">
+            <text>退出账号</text>
+          </div>
       </div>
     </div>
 
@@ -71,35 +76,38 @@ export default {
       const url = '../order/main';
       wx.switchTab({ url });
     },
-    getUserInfo () {
-      // 调用登录接口
-      wx.login({
-        success: (code) => {
-          // console.log( code, "https://byloft.top" )
-          wx.getUserInfo({
-            success: (res) => {
-              this.userInfo = res.userInfo
-            }
-          })
+    logout(){
+      wx.showModal({
+        title: '确定退出？',
+        content: '退出登录后将无法查看订单，重新登录即可查看',
+        confirmText: "确定",
+        cancelText: "取消",
+        success: function (res) {
+          console.log(res);
+          if (res.confirm) {
+            wx.clearStorageSync();
+            const url = '../personal/main';
+            wx.reLaunch({ url });
+          } else {
+            
+          }
         }
-      })
-    },
-    clickHandle (msg, ev) {
-      console.log('clickHandle:', msg, ev)
+      });
     }
   },
 
   created () {
-    // 调用应用实例的方法获取全局数据
-    // this.getUserInfo()
     
   },
   onShow(){
+    console.log(222)
     let storageObj =  wx.getStorageSync("loginInfo"); 
     this.userInfo = storageObj;
   },
   onLoad(){
-
+    console.log(111)
+    let storageObj =  wx.getStorageSync("loginInfo"); 
+    this.userInfo = storageObj;
   }
 }
 </script>
@@ -132,6 +140,13 @@ export default {
 .company-infor{
   margin-top: 100px;
   width: 100%;
+}
+.logout{
+  text-align: center;
+  margin-top: 20px;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  padding: 10px 10px;
 }
 /* .company-infor .about{
   border-bottom: 1px solid #ccc;
