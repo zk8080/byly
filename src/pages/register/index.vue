@@ -5,13 +5,13 @@
             <div class="weui-cell weui-cell_phone">
                 <div class="weui-cell__hd"><label class="weui-label">密码</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="password" name="userPwd" @change="getPwd" placeholder="请输入密码"/>
+                    <input class="weui-input" type="password" name="userPwd" v-model="password" placeholder="请输入密码"/>
                 </div>
             </div>
             <div class="weui-cell weui-cell_phone">
                 <div class="weui-cell__hd"><label class="weui-label">确认密码</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="password" name="userPwd" @change="getAgainPwd" placeholder="请再次输入密码"/>
+                    <input class="weui-input" type="password" name="userPwd"  v-model="againPwd" placeholder="请再次输入密码"/>
                 </div>
             </div>
         </div>
@@ -48,13 +48,6 @@ export default {
   },
 
   methods: {
-        getPwd(e){
-            this.password = e.target.value;
-        },
-        getAgainPwd(e){
-            
-              this.againPwd = e.target.value;
-        },
         showTopTipsFun(tipStr) {
             this.showTopTips = true;
             this.tips = tipStr;

@@ -16,7 +16,7 @@ request.interceptors.request.use((request) => {
 
 request.interceptors.response.use(
   (response, promise) => {
-    
+    console.log( response.data, "response" )
     // wx.hideNavigationBarLoading()
     wx.hideLoading();
     return promise.resolve(response.data)

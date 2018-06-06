@@ -67,6 +67,13 @@ export default {
                                 wx.setStorageSync( 'loginInfo', data );
                                 const url = "../personal/main";
                                 wx.switchTab({ url });
+                            }else{
+                                let errStr = res.message;
+                                wx.showToast({
+                                    title: errStr,
+                                    icon: 'none',
+                                    duration: 2000
+                                });
                             }
                         });
                         

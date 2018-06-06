@@ -5,13 +5,13 @@
             <div class="weui-cell weui-cell_phone">
                 <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" name="userName" @change="getuserName" placeholder="请输入手机号"/>
+                    <input class="weui-input" type="number" name="userName" v-model='username' placeholder="请输入手机号"/>
                 </div>
             </div>
             <div class="weui-cell weui-cell_vcode">
                 <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" @change="getauthCode" name="authCode" placeholder="请输入验证码"/>
+                    <input class="weui-input" type="number"  v-model='authCode' name="authCode" placeholder="请输入验证码"/>
                 </div>
                 <div class="weui-cell__ft">
                    <button class="weui-vcode-btn" :disabled="disabled" @click="getAuthCode"  data-statu="open">{{time}}</button>
@@ -257,6 +257,13 @@ export default {
                 if( res.code == "200" ){
                     const url = `../register/main?type=${this.type}&username=${this.username}&authcode=${this.authCode}`
                     wx.navigateTo({ url })
+                }else{
+                    let errStr = res.message;
+                    wx.showToast({
+                        title: errStr,
+                        icon: 'none',
+                        duration: 2000//持续的时间
+                    })
                 }
             }
             
@@ -266,16 +273,21 @@ export default {
   created () {
     // 调用应用实例的方法获取全局数据
   },
-  onshow(){
+  onShow(){
+      console.log(111342)
         clearInterval(this.timeInterval);
         this.showModal = false;
-        this.time = '获取二维码';
+        this.time = '获取验证码';
         this.currentTime = 61;
         this.disabled = false;
+        this.username = "";
+        this.authCode = "";
   },
   onLoad(){
       this.showModal = false;
       this.type = this.$root.$mp.query.type;
+      this.username = "";
+      this.authCode = "";
   }
 }
 </script>

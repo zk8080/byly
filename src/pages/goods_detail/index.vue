@@ -34,7 +34,7 @@
                     <text>推荐人</text>
                     <div class="recommend-input">
                         <div>
-                            <input type="text" name="carRecommendBusinessName" :value="carRecommendBusinessName" @change="getRecommendBusiness" placeholder="请输入推荐人"/>
+                            <input type="text" name="carRecommendBusinessName" v-model="carRecommendBusinessName" placeholder="请输入推荐人"/>
                         </div>
                     </div>  
                 </div>
@@ -42,7 +42,7 @@
                     <text>门店</text>
                     <div class="recommend-input">
                         <div>
-                            <input type="text" name="carRecommendUser" :value="carRecommendUser" @change="getRecommendUser" placeholder="请输入门店"/>
+                            <input type="text" name="carRecommendUser" v-model="carRecommendUser" placeholder="请输入门店"/>
                         </div>
                     </div>  
                 </div>
@@ -119,12 +119,6 @@ export default {
         add: function () {
             this.commoDityCount ++;
         },
-        getRecommendBusiness: function (e) {
-            this.carRecommendBusinessName = e.target.value;
-        },
-        getRecommendUser: function (e) {
-            this.carRecommendUser = e.target.value;
-        },
         showTopTipsFun(tipStr) {
             this.showTopTips = true;
             this.tips = tipStr;
@@ -136,9 +130,7 @@ export default {
         gotoPay(){
             if( this.userInfo.deviceId ){
                 if( this.dataList.commodity_type_id == '228' ){
-                    console.log(111)
                     if( this.carRecommendBusinessName == '' || this.carRecommendUser == '' ){
-                        console.log(222);
                         this.showTopTipsFun('推荐人或者推荐店铺不能为空');
                         return;
                     }
@@ -208,7 +200,6 @@ export default {
             }
         },
         pay(obj){
-            console.log(3233)
             wx.requestPayment({
                 'timeStamp': obj.timestamp,
                 'nonceStr': obj.noncestr,
@@ -224,7 +215,11 @@ export default {
                     this.close();
                 },
                 'fail': function (res) {
-                    console.log(res, 'err')
+                    wx.showToast({
+                        title: '支付失败',
+                        icon: 'none',
+                        duration: 2000
+                    });
                 }
             })
         }
@@ -269,11 +264,11 @@ export default {
 }
 .container swiper{
     width: 100%;
-    height: 220px;
+    height: 375px;
 }
 swiper-item image{
     width: 100%;
-    height: 240px;
+    height: 375px;
 }
 .goods_header{
     padding: 10px 20px;
