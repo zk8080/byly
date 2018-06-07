@@ -27,6 +27,7 @@ export default {
         'pages/order_detail/main',
         'pages/msg-success/main',    
         'pages/authCode/main',       
+        'pages/service_center/main',  
     ],
     window: {
       backgroundTextStyle: 'light',

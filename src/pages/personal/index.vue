@@ -37,10 +37,10 @@
         </a>
       </div>
       <div class="hotline">
-        <a href="">
+        <a href="../service_center/main">
           <div>
             <img src="/static/images/tel.png" alt="">
-            <text>服务热线</text>
+            <text>服务中心</text>
           </div>
         </a>
       </div>

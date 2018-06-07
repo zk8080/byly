@@ -22,45 +22,39 @@
             <img src="/static/images/pay.png" alt="">
             <span>支持微信支付</span>
         </div>
+        <div class="order-detail">
+            <div class="recommend-user" v-if="dataList.commodity_type_id == '228'">
+                <text>推荐人</text>
+                <div class="recommend-input">
+                    <div>
+                        <input type="text" name="carRecommendBusinessName" v-model="carRecommendBusinessName" placeholder="请输入推荐人"/>
+                    </div>
+                </div>  
+            </div>
+            <div class="recommend-business" v-if="dataList.commodity_type_id == '228'"> 
+                <text>门店</text>
+                <div class="recommend-input">
+                    <div>
+                        <input type="text" name="carRecommendUser" v-model="carRecommendUser" placeholder="请输入门店"/>
+                    </div>
+                </div>  
+            </div>
+            <div class="order-num clearfix">
+                <text class="fl">数量</text>
+                <div class="num-input fr clearfix">
+                    <div class="num-box">
+                        <img src="/static/images/jian.png" @click='jian'/>
+                        <input disabled='true' name="commoDityCount" :value='commoDityCount'/>
+                        <img src="/static/images/add.png" @click='add'/>
+                    </div>
+                </div>  
+            </div>
+        </div>
         <div class="describe" v-for="(item, index) in describeImg" :key="index">
             <image mode="widthFix"  :src="baseUrl + item.imageUrl" alt="" />
         </div>
-        <div :class='showFullPage? "show fullpage ": "hide fullpage"' @click='close'>
-            
-        </div>
         <div class="order">
-            <div :class='orderShow? "order-detail on": "order-detail"'>
-                <div class="recommend-user" v-if="dataList.commodity_type_id == '228'">
-                    <text>推荐人</text>
-                    <div class="recommend-input">
-                        <div>
-                            <input type="text" name="carRecommendBusinessName" v-model="carRecommendBusinessName" placeholder="请输入推荐人"/>
-                        </div>
-                    </div>  
-                </div>
-                <div class="recommend-business" v-if="dataList.commodity_type_id == '228'"> 
-                    <text>门店</text>
-                    <div class="recommend-input">
-                        <div>
-                            <input type="text" name="carRecommendUser" v-model="carRecommendUser" placeholder="请输入门店"/>
-                        </div>
-                    </div>  
-                </div>
-                <div class="order-num clearfix">
-                    <text class="fl">数量</text>
-                    <div class="num-input fr clearfix">
-                        <div>
-                            <img src="/static/images/jian.png" @click='jian'/>
-                            <input disabled='true' name="num" :value='commoDityCount'/>
-                            <img src="/static/images/add.png" @click='add'/>
-                        </div>
-                    </div>  
-                </div>
-            </div>
-            <div v-if="orderEnd" class="order-btn" @click='gotoPay'>
-                <text>微信支付</text>
-            </div>
-            <div v-else class="order-btn" @click='open'>
+            <div class="order-btn" @click='gotoPay'>
                 <text>立即购买</text>
             </div>
         </div>
@@ -93,19 +87,7 @@ export default {
             
     },
     methods: {
-        open(){
-            this.showFullPage = true;
-            this.orderShow = true;
-            this.orderEnd = true;
-        },
-        close(){
-            this.showFullPage = false;
-            this.orderShow = false;
-            this.orderEnd = false;
-            this.commoDityCount = 1;
-            this.carRecommendBusinessName = '';
-            this.carRecommendUser = "";
-        },
+
         jian: function () {
             if (this.commoDityCount <= 1){
                 this.commoDityCount = 1;
@@ -150,6 +132,7 @@ export default {
                                 carRecommendBusinessName: this.carRecommendBusinessName,
                                 carRecommendUser: this.carRecommendUser,
                             }
+                        console.log( jsons, "jsons" )
                         //将对象转成json字符串， 不然后台无法拿到参数 参数会变成jsons[key]=value 后台需要jsons={key:value}
                         jsons = JSON.stringify(jsons);                            
                         params = {
@@ -160,7 +143,7 @@ export default {
                             .then( res => {
                                 // console.log(res, "res")
                                 if( res.code == "200" ){
-                                    this.close();
+                                    // this.close();
                                     let result = res.result;
                                     let jsonsData = {
                                             userId: this.userInfo.userId,
@@ -368,7 +351,7 @@ swiper-item image{
     width: 100%;
     /* height: 1322px; */
 }
-.fullpage{
+/* .fullpage{
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
@@ -377,10 +360,10 @@ swiper-item image{
   top: 0;
   z-index: 888;
   overflow: hidden;
-}
+} */
 .order{
   width: 100%;
-  height: 200px;
+  height: 50px;
   position: fixed;
   left: 0;
   bottom: 0;
@@ -389,35 +372,33 @@ swiper-item image{
   overflow: hidden;
 
 }
-.order .order-detail{
-  width: 100%;
-  background-color: #fff;
-  position: absolute;
-  left: 0;
-  bottom: 40px; 
-  z-index: 900;
-  display: none;
+.recommend-input input{
+    border-bottom: 1px solid #ccc;
+    padding-left: 5px;
 }
-.order-detail.on{
-    display: block;
+.order-detail{
+    border-bottom: 1px solid #ccc;
 }
 .order-detail .order-num{
   padding: 20rpx 40rpx;
   display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .order-num .fl{
     width: 40px;
 }
-.order-detail .num-input{
-    flex: 1;
+.num-box{
+    display: flex;
+    align-items: center; 
 }
-.order-detail .num-input div{
+/* .num-input div{
     float: right;
-}
-.order-detail .order-num image{
+} */
+.order-num img{
   display: inline-block;
-  width: 48rpx;
-  height: 48rpx;
+  width: 24px;
+  height: 24px;
 }
 .order-detail .order-num input{
   width: 64rpx;

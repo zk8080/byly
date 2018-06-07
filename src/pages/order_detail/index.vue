@@ -170,13 +170,14 @@ export default {
 .container{
   height: 100%;
   background-color: #eee;
+  padding: 10px;
 }
 .voucher{
   background-color: #fff;
   border-radius: 10rpx;
   padding: 20rpx;
-  margin: 20rpx;
-
+  width: 100%;
+  box-sizing:border-box;
 }
 .voucher div{
     display: flex;

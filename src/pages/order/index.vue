@@ -14,12 +14,21 @@
         <div class="weui-tab__panel">
           <div class="weui-tab__content"  :hidden="activeIndex != 0">
               <orderCard v-for="( orderItem, orderIndex ) in orderList" :key="orderIndex"  :orderData="orderItem" :aging="aging"></orderCard>
+              <p class="noOrder" v-if="hasOrder">
+                暂无订单
+              </p>
           </div>
           <div class="weui-tab__content"  :hidden="activeIndex != 1">
               <orderCard v-for="( orderItem, orderIndex ) in orderList" :key="orderIndex"  :orderData="orderItem" :aging="aging"></orderCard>
+              <p class="noOrder" v-if="hasOrder">
+                暂无订单
+              </p>
           </div>
           <div class="weui-tab__content"  :hidden="activeIndex != 2">
               <orderCard v-for="( orderItem, orderIndex ) in orderList" :key="orderIndex"  :orderData="orderItem" :aging="aging"></orderCard>
+              <p class="noOrder" v-if="hasOrder">
+                暂无订单
+              </p>
           </div>
         </div>
       </div>
@@ -46,6 +55,7 @@ export default {
       fontSize: 30,
       orderList: [],
       aging: '',
+      hasOrder: false,
     }
   },
   components: {
@@ -73,13 +83,26 @@ export default {
     async getData(){
       let status = parseInt(this.activeIndex) + 1;
       let params = {
-        userId: '33',
-        employstatus: "1",
+        userId: this.userInfo.userId,
+        employstatus: status,
       }
       const res = await api.queryIndentStatus(params)
       if( res.code == "200" ){
         this.orderList = res.result.userCardCouponList;
+        
+        if( this.orderList.length < 1 ){
+            this.hasOrder = true;
+        }else{
+          this.hasOrder = false;
+        }
         this.aging = res.result.aging;
+      }else{
+        let errStr = res.message;
+        wx.showToast({
+            title: errStr,
+            icon: 'none',
+            duration: 2000
+        });
       }
     }
   },
@@ -93,8 +116,19 @@ export default {
     this.activeIndex = 0;
     let storageObj =  wx.getStorageSync("loginInfo"); 
     this.userInfo = storageObj;
-    this.getData();
+    if( this.userInfo.userId ){
+      this.getData();
+    }
+    
   },
+  onLoad(){
+    this.activeIndex = 0;
+    let storageObj =  wx.getStorageSync("loginInfo"); 
+    this.userInfo = storageObj;
+    if( this.userInfo.userId ){
+      this.getData();
+    }
+  }
 }
 </script>
 
@@ -114,6 +148,8 @@ page,
   /* padding-top: 60px; */
   /* text-align: center; */
   padding: 10px;
+  height: 100%;
+  box-sizing: border-box;
 }
 .weui-navbar__slider_0 {
   left: 29rpx;
@@ -126,6 +162,13 @@ page,
 .weui-navbar__slider_2 {
   left:29rpx;
   transform: translateX(500rpx);
+}
+.noOrder{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .no_order{
   height: 100%;

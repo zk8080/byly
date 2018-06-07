@@ -13,13 +13,14 @@
 		    <div v-for="(item, index) in typeList" :key="index" :class="currentTab==index ? 'swiper-cont-list cur' : 'swiper-cont-list'">
                 <div class="weui-panel__bd" v-for="(detailItem, detailIndex) in goodsList" :key="detailIndex">
                     <a @click="gotoDetail(detailItem)" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
-                        <div class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+                       <div class="weui-media-box__hd weui-media-box__hd_in-appmsg">
                             <image class="weui-media-box__thumb" :src=" baseUrl + detailItem.thum_bnail_image_url" />
                         </div>
                         <div class="weui-media-box__bd weui-media-box__bd_in-appmsg">
                             <div class="weui-media-box__title">{{detailItem.commodity_name}}</div>
-                            <div class="weui-media-box__desc">{{detailItem.valid}}</div>
+                            <div class="weui-media-box__desc">{{detailItem.commodity_describe}}</div>
                             <div class="price">¥{{detailItem.terminalPrice}}</div> 
+                            <div class="weui-media-box__desc">{{detailItem.valid}}</div>
                         </div>
                     </a>
                 </div>
@@ -70,6 +71,13 @@ export default {
                 this.typeList = dataList;
                 // console.log( dataList, "datalist" )
                 this.getGoodsList(this.typeList[0]);
+            }else{
+                let errStr = res.message;
+                wx.showToast({
+                    title: errStr,
+                    icon: 'none',
+                    duration: 2000
+                });
             }
         },
         async getGoodsList(data) {
@@ -84,6 +92,13 @@ export default {
             if( res.code == "200" ){
                 console.log(res.result, "res.result")
                 this.goodsList = res.result;
+            }else{
+                let errStr = res.message;
+                wx.showToast({
+                    title: errStr,
+                    icon: 'none',
+                    duration: 2000
+                });
             }
         },
     },
@@ -123,6 +138,7 @@ export default {
 .swiper-cont{
    flex: 1;
    height: 100%;
+   width: 80%;
 }
 .swiper-cont-list{
     display: none;
@@ -132,10 +148,14 @@ export default {
 .cur{
     display: block;
 }
+.weui-media-box_appmsg{
+    display: flex;
+}
 .weui-media-box__desc{
     text-overflow: ellipsis;
     overflow:hidden;
     white-space:nowrap;
+    display: block;
 }
 .price{
     color: red;
@@ -147,7 +167,13 @@ export default {
     display:flex;
     flex-direction:column;
     justify-content:space-between;
-    height:70px;
+    height:85px;
+    overflow: hidden;
+    flex: 1;
+}
+.weui-media-box__hd_in-appmsg{
+    width: 80px;
+    height: 80px;
 }
 
 

@@ -1,10 +1,11 @@
 <template>
     <div class="container">
+        <div class="weui-toptips weui-toptips_warn" v-if="showTopTips">{{tips}}</div>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell weui-cell_phone">
                 <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="number" name="userName" @input="getUserName" placeholder="请输入手机号"/>
+                    <input class="weui-input" type="number" name="username" v-model="username" placeholder="请输入手机号"/>
                 </div>
             </div>
             <div class="weui-cell weui-cell_vcode">
@@ -12,7 +13,7 @@
                     <label class="weui-label">密码</label>
                 </div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="password" name="userPwd" @input="getUserPwd" placeholder="请输入密码"/>
+                    <input class="weui-input" type="password" name="password" v-model="password" placeholder="请输入密码"/>
                 </div>
             </div>
         </div>
@@ -36,6 +37,8 @@ export default {
     return {
       username: '',
       password: '',
+      showTopTips: false,
+      tips: '',
     }
   },
 
@@ -44,44 +47,51 @@ export default {
   },
 
   methods: {
-        getUserName(e){
-            this.username = e.target.value;
-        },
-        getUserPwd(e){
-            this.password = e.target.value;
+      showTopTipsFun(tipStr) {
+            this.showTopTips = true;
+            this.tips = tipStr;
+            setTimeout(() => {
+                this.showTopTips = false;
+                this.tips = "";
+            }, 2000)
         },
         login(){
-            wx.login({
-                success: (code) => {
-                    return new Promise( resolve => {
-                        let params = {
-                            userName: this.username,
-                            userPwd: this.password,
-                            code: code.code,
-                        };
-                        api.queryLogin(params).then( res=> {
-                            if( res.code == "200" ){
-                                console.log( 111 )
-                                const data = res.result;
-                                //存储用户信息
-                                wx.setStorageSync( 'loginInfo', data );
-                                const url = "../personal/main";
-                                wx.switchTab({ url });
-                            }else{
-                                let errStr = res.message;
-                                wx.showToast({
-                                    title: errStr,
-                                    icon: 'none',
-                                    duration: 2000
-                                });
-                            }
-                        });
-                        
-                    })
-                    
-                    
-                }
-            })
+            if( this.username == "" ){
+                this.showTopTipsFun('用户名不能为空');
+            }else if( this.password == "" ){
+                this.showTopTipsFun('密码不能为空');
+            }else{
+                wx.login({
+                    success: (code) => {
+                        return new Promise( resolve => {
+                            let params = {
+                                userName: this.username,
+                                userPwd: this.password,
+                                code: code.code,
+                            };
+                            api.queryLogin(params).then( res=> {
+                                if( res.code == "200" ){
+                                    console.log( 111 )
+                                    const data = res.result;
+                                    //存储用户信息
+                                    wx.setStorageSync( 'loginInfo', data );
+                                    const url = "../personal/main";
+                                    wx.switchTab({ url });
+                                }else{
+                                    let errStr = res.message;
+                                    wx.showToast({
+                                        title: errStr,
+                                        icon: 'none',
+                                        duration: 2000
+                                    });
+                                }
+                            });
+                            
+                        })
+                    }
+                })
+            }
+            
 
         //   const res = await api.queryLogin(params);
             //   console.log( res, 'res' )
