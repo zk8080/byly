@@ -10,6 +10,11 @@
         <div class="goods_header">
             <div class="goods_title">
                 <p>{{dataList.commodity_name}}</p>
+                <div>
+                    <button class="share_btn" open-type='share'>
+                        <img src="/static/images/share.png" alt="">
+                    </button>
+                </div>
             </div>
             <div class="goods_attentions">
                 <p>{{dataList.commodity_describe }}</p>
@@ -110,73 +115,77 @@ export default {
             }, 2000)
         },
         gotoPay(){
-            if( this.userInfo.deviceId ){
+            if( this.userInfo.openId ){
                 if( this.dataList.commodity_type_id == '228' ){
                     if( this.carRecommendBusinessName == '' || this.carRecommendUser == '' ){
                         this.showTopTipsFun('推荐人或者推荐店铺不能为空');
                         return;
                     }
                 }
-                wx.login({
-                    success: (code) => {
-                        let params = '';
-                        let jsons = {
-                                businessId: this.dataList.business_company_id,
-                                userId: this.userInfo.userId,
-                                acessToken: this.userInfo.acessToken,
-                                userkey: this.userInfo.userKey,
-                                commoDityCount: this.commoDityCount,
-                                code: code.code,
-                                commoDityId: this.dataList.commodity_id,
-                                carType: this.dataList.commodity_distinction,
-                                carRecommendBusinessName: this.carRecommendBusinessName,
-                                carRecommendUser: this.carRecommendUser,
-                            }
-                        console.log( jsons, "jsons" )
-                        //将对象转成json字符串， 不然后台无法拿到参数 参数会变成jsons[key]=value 后台需要jsons={key:value}
-                        jsons = JSON.stringify(jsons);                            
-                        params = {
-                            'jsons': jsons
-                        }
-                        // let jsons = "0000";
-                        api.queryCarCouponIndentDispose(params)
-                            .then( res => {
-                                // console.log(res, "res")
-                                if( res.code == "200" ){
-                                    // this.close();
-                                    let result = res.result;
-                                    let jsonsData = {
-                                            userId: this.userInfo.userId,
-                                            acessToken: this.userInfo.acessToken,
-                                            userkey: this.userInfo.userKey,
-                                            indentId: result.indentId,
-                                            indentKey: result.indentKey,
-                                            indentOddnumbers: result.indentoddnumbers
-                                        }
-                                    jsonsData = JSON.stringify(jsonsData);
-                                    let params = {
-                                        "jsons": jsonsData,
-                                        type: "2",
-                                        openid: this.userInfo.deviceId,
-                                    }
-                                    api.queryPay(params)
-                                        .then( res => {
-                                            if( res.code == "200" ){
-                                                let dataObj = res.result;
-                                                this.pay(dataObj);
-                                            }
-                                        })
-                                }else{
-                                    let errStr = res.message;
-                                    wx.showToast({
-                                        title: errStr,
-                                        icon: 'none',
-                                        duration: 2000//持续的时间
-                                    })
-                                }
-                            })
+
+                let params = '';
+                let jsons = {
+                        businessId: this.dataList.business_company_id,
+                        userId: this.userInfo.userId,
+                        smallAcessToken: this.userInfo.smallAcessToken,
+                        smallUserkey: this.userInfo.smallUserkey,
+                        commoDityCount: this.commoDityCount,
+                        openId: this.userInfo.openId,
+                        commoDityId: this.dataList.commodity_id,
+                        carType: this.dataList.commodity_distinction,
+                        carRecommendBusinessName: this.carRecommendBusinessName,
+                        carRecommendUser: this.carRecommendUser,
                     }
-                })
+                console.log( jsons, "jsons" )
+                //将对象转成json字符串， 不然后台无法拿到参数 参数会变成jsons[key]=value 后台需要jsons={key:value}
+                jsons = JSON.stringify(jsons);                            
+                params = {
+                    'jsons': jsons
+                }
+                
+                api.queryCarCouponIndentDispose(params)
+                    .then( res => {
+                        // console.log(res, "res")
+                        if( res.code == "200" ){
+                            // this.close();
+                            let result = res.result;
+                            let jsonsData = {
+                                    userId: this.userInfo.userId,
+                                    smallAcessToken: this.userInfo.smallAcessToken,
+                                    smallUserkey: this.userInfo.smallUserkey,
+                                    indentId: result.indentId,
+                                    indentKey: result.indentKey,
+                                    indentOddnumbers: result.indentoddnumbers
+                                }
+                            jsonsData = JSON.stringify(jsonsData);
+                            let params = {
+                                'jsons': jsonsData,
+                                type: "2",
+                                openId: this.userInfo.openId,
+                            }
+                            api.queryPay(params)
+                                .then( res => {
+                                    if( res.code == "200" ){
+                                        let dataObj = res.result;
+                                        this.pay(dataObj);
+                                    }else{
+                                        let errStr = res.message;
+                                        wx.showToast({
+                                            title: errStr,
+                                            icon: 'none',
+                                            duration: 2000//持续的时间
+                                        })
+                                    }
+                                })
+                        }else{
+                            let errStr = res.message;
+                            wx.showToast({
+                                title: errStr,
+                                icon: 'none',
+                                duration: 2000//持续的时间
+                            })
+                        }
+                    })
             }else{
                 const url = "../login/main";
                 wx.navigateTo({ url });
@@ -205,6 +214,13 @@ export default {
                     });
                 }
             })
+        }
+    },
+    onShareAppMessage: function (res) {
+        let titleStr = this.dataList.commodity_name
+        return {
+            title: titleStr,
+            path: '/pages/goods_detail/main'
         }
     },
     onShow(){
@@ -258,14 +274,17 @@ swiper-item image{
     background-color: #fff;
 }
 .goods_header .goods_title{
-    font-size: 16px;
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .goods_header .goods_attentions{
-    font-size: 12px;
+    font-size: 14px;
     color: #666;
 }
 .goods_header .goods_price{
-    font-size: 16px;
+    font-size: 18px;
     color: red;
 }
 .pay_way{
@@ -351,16 +370,20 @@ swiper-item image{
     width: 100%;
     /* height: 1322px; */
 }
-/* .fullpage{
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 888;
-  overflow: hidden;
-} */
+.share_btn{
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    background-color:#fff;
+}
+.share_btn img{
+    height: 100%;
+    width: 100%;
+    vertical-align: top;
+}
+.share_btn::after{
+    border: none;
+}
 .order{
   width: 100%;
   height: 50px;

@@ -28,6 +28,8 @@
 <script>
 import api from '../../utils/api';
 // import config from '../../config.js'
+//index.js  
+var md5 = require('../../utils/md5.js')  
 
 export default {
   data () {
@@ -62,9 +64,10 @@ export default {
             }else{
                 wx.login({
                     success: (code) => {
+                        let userPwdStr = md5.hexMD5(this.password);
                         let params = {
                             userName: this.username,
-                            userPwd: this.password,
+                            userPwd: userPwdStr,
                             authCode: this.authCode,
                             type: this.type,
                             code: code.code,
@@ -79,6 +82,11 @@ export default {
                                         icon: 'none',
                                         duration: 2000//持续的时间
                                     })
+                                    const data = res.result;
+                                    //存储用户信息
+                                    wx.setStorageSync( 'loginInfo', data );
+                                    const url = '../personal/main';
+                                    wx.switchTab({ url });
                                 }else{
                                     let errStr = res.message;
                                     wx.showToast({
@@ -114,6 +122,8 @@ export default {
         }else if( res.platform == "android" ){
             this.osType = 1;
         }
+        this.password= '';
+        this.againPwd= '';
   }
 }
 </script>

@@ -138,7 +138,7 @@ export default {
 .swiper-cont{
    flex: 1;
    height: 100%;
-   width: 80%;
+   width: 79%;
 }
 .swiper-cont-list{
     display: none;

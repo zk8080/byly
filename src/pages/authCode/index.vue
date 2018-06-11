@@ -11,46 +11,15 @@
             <div class="weui-cell weui-cell_vcode">
                 <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="number"  v-model='authCode' name="authCode" placeholder="请输入验证码"/>
+                    <input class="weui-input" type="text"  v-model='authCode' name="authCode" placeholder="请输入验证码"/>
                 </div>
                 <div class="weui-cell__ft">
                    <button class="weui-vcode-btn" :disabled="disabled" @click="getAuthCode"  data-statu="open">{{time}}</button>
-                   <!-- <input class="weui-vcode-btn" type="button" :disabled="disabled" @click="getAuthCode" v-model.lazy="time" /> -->
                 </div>
             </div>
-            <!-- <div class="weui-cell weui-cell_vcode">
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" @change="getVerifyCode" name="verifyCode" placeholder="请输入图形码"/>
-                </div>
-                <div class="weui-cell__ft">
-                    <img :src="'data:image/png;base64,' + imgCode" />
-                   
-                </div>
-            </div> -->
         </div>
-        <!-- <button class="login_btn" size="default" type="primary" @click="sendAuthCode">确认</button> -->
+        
         <button class="login_btn" size="default" type="primary" @click="VerifiCode">下一步</button>
-        <!-- <div :class="showModal == true ? 'modal on': 'modal'" >
-            <div class="modal-wrap">
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" @change="getVerifyCode" name="verifyCode" placeholder="请输入图形码"/>
-                </div>
-                <div class="weui-cell__ft">
-                    <img :src="'data:image/png;base64,' + imgCode" />
-                </div>
-            </div>
-        </div> -->
-        <!-- <modal :hidden="showModal" title="填写图形码" confirm-text="确定" cancel-text="返回" @cancel="cancel" @confirm="sendAuthCode">
-            <div class="modal-wrap">
-                <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" @change="getVerifyCode" name="verifyCode" v-model="verifyCode" placeholder="请输入图形码"/>
-                </div>
-                <div class="weui-cell__ft">
-                    <img :src="'data:image/png;base64,' + imgCode" />
-                </div>
-            </div>
-        </modal> -->
-        <!--mask-->
         <div class="drawer_screen" @click="powerDrawer" data-statu="close" v-if="showModal"></div> 
         <!--content-->
         <!--使用animation属性指定需要执行的动画-->
@@ -242,9 +211,11 @@ export default {
         async VerifiCode(){
             if(this.username == '' ){
                 this.showTopTipsFun('请输入手机号！')
-            }else if( this.authCode == '' ){
+            }
+            else if( this.authCode == '' ){
                 this.showTopTipsFun('请输入验证码！')
-            }else{
+            }
+            else{
                 
                 let params = {
                     phone: this.username,
@@ -253,7 +224,7 @@ export default {
                 }
                 const res = await api.querySendCode(params);
                 
-                console.log( res, "resresresres" )
+                // console.log( res, "resresresres" )
                 if( res.code == "200" ){
                     const url = `../register/main?type=${this.type}&username=${this.username}&authcode=${this.authCode}`
                     wx.navigateTo({ url })
@@ -280,8 +251,6 @@ export default {
         this.time = '获取验证码';
         this.currentTime = 61;
         this.disabled = false;
-        this.username = "";
-        this.authCode = "";
   },
   onLoad(){
       this.showModal = false;
@@ -373,7 +342,7 @@ export default {
  left: 0; 
  z-index: 1001; 
  background: #FAFAFA; 
- margin: -150px 50rpx 0 50rpx; 
+ margin: -50% 10% 0 10%; 
  border-radius: 3px; 
 } 
   

@@ -123,6 +123,7 @@ export default {
   width: 100%;
   padding: 20px;
   background-color: #119a26;
+  box-sizing:  border-box;
 }
 
 .userinfo-avatar {

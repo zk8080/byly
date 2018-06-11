@@ -31,7 +31,10 @@
 </template>
 
 <script>
-import api from '../../utils/api'
+import api from '../../utils/api';
+//index.js  
+var md5 = require('../../utils/md5.js')  
+
 export default {
   data () {
     return {
@@ -64,14 +67,21 @@ export default {
                 wx.login({
                     success: (code) => {
                         return new Promise( resolve => {
+                            let userPwdStr = md5.hexMD5(this.password);
                             let params = {
                                 userName: this.username,
-                                userPwd: this.password,
+                                userPwd: userPwdStr,
                                 code: code.code,
                             };
                             api.queryLogin(params).then( res=> {
                                 if( res.code == "200" ){
-                                    console.log( 111 )
+                                    
+                                    const data = res.result;
+                                    //存储用户信息
+                                    wx.setStorageSync( 'loginInfo', data );
+                                    const url = "../personal/main";
+                                    wx.switchTab({ url });
+                                }else if(res.code == "220"){ 
                                     const data = res.result;
                                     //存储用户信息
                                     wx.setStorageSync( 'loginInfo', data );
@@ -100,6 +110,12 @@ export default {
 
   created () {
     // 调用应用实例的方法获取全局数据
+  },
+  onLoad(){
+      this.username='';
+      this.password= '';
+      this.showTopTips= false;
+      this.tips= '';
   }
 }
 </script>
