@@ -127,6 +127,20 @@ const api = {
                 })
         })
     },
+
+    //新设备登录
+    queryNewEquipment: (req) => {
+        req = qs.stringify(req);
+        return new Promise( resolve => {
+            requert.post( "/Code/wxVerifyCode", req )
+                .then( res => {
+                    resolve(res)
+                } )
+                .catch( err => {
+                    console.log(err)
+                })
+        })
+    }
 }
 
 export default api;

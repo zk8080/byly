@@ -83,7 +83,6 @@ export default {
         confirmText: "确定",
         cancelText: "取消",
         success: function (res) {
-          console.log(res);
           if (res.confirm) {
             wx.clearStorageSync();
             const url = '../personal/main';

@@ -20,16 +20,12 @@
                 <p>{{dataList.commodity_describe }}</p>
             </div>
             <div class="goods_price">
-                <p>¥{{dataList.terminalPrice}}</p>
+                <p>¥ {{dataList.terminalPrice}}<span>(优惠价)</span></p>
             </div>
-        </div>
-        <div class="pay_way">
-            <img src="/static/images/pay.png" alt="">
-            <span>支持微信支付</span>
         </div>
         <div class="order-detail">
             <div class="recommend-user" v-if="dataList.commodity_type_id == '228'">
-                <text>推荐人</text>
+                <text>推荐人:</text>
                 <div class="recommend-input">
                     <div>
                         <input type="text" name="carRecommendBusinessName" v-model="carRecommendBusinessName" placeholder="请输入推荐人"/>
@@ -37,7 +33,7 @@
                 </div>  
             </div>
             <div class="recommend-business" v-if="dataList.commodity_type_id == '228'"> 
-                <text>门店</text>
+                <text>门店:</text>
                 <div class="recommend-input">
                     <div>
                         <input type="text" name="carRecommendUser" v-model="carRecommendUser" placeholder="请输入门店"/>
@@ -55,6 +51,11 @@
                 </div>  
             </div>
         </div>
+        <div class="pay_way">
+            <img src="/static/images/pay.png" alt="">
+            <span>支持微信支付</span>
+        </div>
+        
         <div class="describe" v-for="(item, index) in describeImg" :key="index">
             <image mode="widthFix"  :src="baseUrl + item.imageUrl" alt="" />
         </div>
@@ -204,7 +205,8 @@ export default {
                         icon: 'success',
                         duration: 2000
                     });
-                    this.close();
+                    const url = "../order/main";
+                    wx.switchTab({ url });
                 },
                 'fail': function (res) {
                     wx.showToast({
@@ -286,6 +288,9 @@ swiper-item image{
 .goods_header .goods_price{
     font-size: 18px;
     color: red;
+}
+.goods_price span{
+    color: #666;
 }
 .pay_way{
     width: 100%;
@@ -400,7 +405,7 @@ swiper-item image{
     padding-left: 5px;
 }
 .order-detail{
-    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
 }
 .order-detail .order-num{
   padding: 20rpx 40rpx;
@@ -409,7 +414,8 @@ swiper-item image{
   justify-content: space-between;
 }
 .order-num .fl{
-    width: 40px;
+    width: 80px;
+    text-align: left;
 }
 .num-box{
     display: flex;
@@ -456,10 +462,12 @@ swiper-item image{
     padding: 10px 20px;
 }
 .recommend-user text{
-    width: 60px;
+    width: 80px;
+    text-align: left;
 }
 .recommend-business text{
-    width: 60px;
+    width: 80px;
+    text-align: left;
 }
 .recommend-input {
     flex: 1;

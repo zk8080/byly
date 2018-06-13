@@ -12,7 +12,7 @@
           <view class="canvas-box">
             <canvas style="width: 686rpx;height: 686rpx;background:#f1f1f1;" canvas-id="mycanvas"/>
           </view>
-        <text>在使用时请出示该二维码</text>
+        <text>{{dataObj.card_uniqueness}}</text>
         </div>
         <div class="time">
             <p>{{dataObj.time}}</p>
@@ -27,15 +27,6 @@
           <p v-else>二维码仅可使用一次（{{timer}}s失效）</p>
           
         </div>
-        <!-- <div class="username">
-            <text class="l-cont">姓名</text>
-            <text>{{}}</text>
-        </div>
-        <div class="tel">
-            <text class="l-cont">电话</text>
-            <text>{{tel}}</text>
-        </div> -->
-        <!-- </div> -->
       </div>
   </div>
 </template>
@@ -64,13 +55,9 @@ export default {
   },
   methods: {
     async getData(){
-      // let params = {
-      //   cardId: this.cardId,
-      //   userId: this.userId,
-      // }
       let params = {
-        cardId: 73884,
-        userId: 33,
+        cardId: this.cardId,
+        userId: this.userId,
       }
       const res = await api.queryDynamicCode(params);
       if( res.code == "200" ){
@@ -131,9 +118,6 @@ export default {
           this.timer = aging;
           if (aging <= 0) {
               clearInterval(this.interval)
-              // this.time = '重新发送',
-              // this.currentTime = 61,
-              // this.disabled = false;   
               this.errorFlag = true;
           }
       }, 1000)
@@ -151,7 +135,7 @@ export default {
   },
   onLoad(){
     let storageObj =  wx.getStorageSync("loginInfo"); 
-    this.cardId = storageObj.userId;
+    this.userId = storageObj.userId;
     let cardId = this.$root.$mp.query.cardId;
     this.cardId = cardId;
     let aging = this.$root.$mp.query.aging;
@@ -200,7 +184,7 @@ export default {
 .voucher .ewm text{
   display: block;
   font-size: 28rpx;
-  color: #ccc;
+  color: #000;
   margin-bottom: 8rpx;
 }
 .ewm::before{

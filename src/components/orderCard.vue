@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a :href="'/pages/order_detail/main?cardId=' + orderData.cardId + '&aging=' + aging">
+    <a :href="'/pages/order_detail/main?cardId=' + orderData.card_ID + '&aging=' + aging">
       <div class="order-item"  >
         <!-- <div class="header">
             <text class="fl">订单编号：{{orderData.orderNo}}</text>

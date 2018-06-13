@@ -81,7 +81,14 @@ export default {
       this.getData();
     },
     async getData(){
-      let status = parseInt(this.activeIndex) + 1;
+      let status = 1;
+      if( this.activeIndex == 0 ){
+        status = parseInt(this.activeIndex) + 1
+      }else if(this.activeIndex == 1){
+        status = parseInt(this.activeIndex) + 2;
+      }else if(this.activeIndex == 2){
+        status = parseInt(this.activeIndex);
+      }
       let params = {
         userId: this.userInfo.userId,
         employstatus: status,
@@ -89,7 +96,6 @@ export default {
       const res = await api.queryIndentStatus(params)
       if( res.code == "200" ){
         this.orderList = res.result.userCardCouponList;
-        
         if( this.orderList.length < 1 ){
             this.hasOrder = true;
         }else{

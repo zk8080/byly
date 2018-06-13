@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import base64 from '../../../static/images/base64';
 import api from '../../utils/api';
 
 export default {
@@ -39,7 +38,6 @@ export default {
         return{
             vertical: true,
             currentTab: 0,
-            // icon60: base64.icon60,
             typeList: [],
             goodsList: [],
             baseUrl:  this.$baseUrl

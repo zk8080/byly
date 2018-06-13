@@ -62,7 +62,7 @@ export default {
         verifyCode: '',
         animationData: {},
         animation: '',
-        timeInterval: ''
+        timeInterval: '',
     }
   },
 
@@ -153,29 +153,7 @@ export default {
                 this.showModal = true; 
             } 
         }, 
-        //点击弹窗确认按钮 发送请求发送验证码
-        async sendAuthCode(){
-            this.util("close");
-            let params = {
-                phone: this.username,
-                type: this.type,
-                verifyCode: this.verifyCode,
-            }
-            const res = await api.querySendCode(params);
-            if( res.code == "200" ){
-                this.disabled = true;
-                this.showTime();
-                
-            }else{
-                // this.showTopTipsFun(res.message);
-                let errStr = res.message;
-                wx.showToast({
-                    title: errStr,
-                    icon: 'none',
-                    duration: 2000//持续的时间
-                })
-            }
-        },
+        
         //点击获取验证码按钮 获取图形码
         async getAuthCode(){
             
@@ -207,6 +185,29 @@ export default {
             }
             
         },
+        //点击弹窗确认按钮 发送请求发送验证码
+        async sendAuthCode(){
+            this.util("close");
+            let params = {
+                phone: this.username,
+                type: this.type,
+                verifyCode: this.verifyCode,
+            }
+            const res = await api.querySendCode(params);
+            if( res.code == "200" ){
+                this.disabled = true;
+                this.showTime();
+                
+            }else{
+                // this.showTopTipsFun(res.message);
+                let errStr = res.message;
+                wx.showToast({
+                    title: errStr,
+                    icon: 'none',
+                    duration: 2000//持续的时间
+                })
+            }
+        },
         //下一步按钮
         async VerifiCode(){
             if(this.username == '' ){
@@ -216,13 +217,11 @@ export default {
                 this.showTopTipsFun('请输入验证码！')
             }
             else{
-                
                 let params = {
                     phone: this.username,
-                    type: this.type,
-                    verifyCode: this.authCode,
+                    authCode: this.authCode,
                 }
-                const res = await api.querySendCode(params);
+                const res = await api.queryNewEquipment(params);
                 
                 // console.log( res, "resresresres" )
                 if( res.code == "200" ){
@@ -309,6 +308,9 @@ export default {
     border: 1px solid #119a26;
     background-color: #fff;
     color: #119a26;
+}
+.weui-vcode-btn[disabled]:not([type]){
+    background-color: #fff;
 }
 .weui-cell__ft img{
     width: 150px;
