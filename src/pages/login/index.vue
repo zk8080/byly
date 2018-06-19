@@ -19,7 +19,7 @@
         </div>
         <div class="weui-cells__tips">
             <a href="/pages/authCode/main?type=2">
-                忘记密码
+                忘记密码?
             </a>
             <a href="/pages/authCode/main?type=1">
                 注册

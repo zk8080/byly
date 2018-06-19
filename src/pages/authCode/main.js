@@ -6,6 +6,6 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarTitleText: '获取验证码',
+    navigationBarTitleText: '',
   }
 }

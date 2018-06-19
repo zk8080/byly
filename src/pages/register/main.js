@@ -6,6 +6,6 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarTitleText: '注册',
+    navigationBarTitleText: '确认密码',
   }
 }

@@ -30,14 +30,18 @@
             <div class="drawer_content"> 
                 <div class="modal-wrap">
                     <div class="weui-cell__bd">
-                        <input class="weui-input" type="text" @change="getVerifyCode" name="verifyCode" v-model="verifyCode" placeholder="请输入图形码"/>
+                        <input class="weui-input authcode_input" type="text" @change="getVerifyCode" name="verifyCode" v-model="verifyCode" placeholder="请输入图形码"/>
                     </div>
-                    <div class="weui-cell__ft">
+                    <div class="weui-cell__ft" @click="getAuthCode">
                         <img :src="'data:image/png;base64,' + imgCode" />
                     </div>
                 </div>
             </div> 
-            <div class="btn_ok" @click="sendAuthCode" data-statu="close">确定</div> 
+            <div class="modal-footer">
+                <div class="btn_cancel" @click="powerDrawer" data-statu="close">取消</div>
+                <div class="btn_ok" @click="sendAuthCode" data-statu="close">确定</div>
+            </div>
+             
         </div>
     </div>
 </template>
@@ -172,7 +176,6 @@ export default {
                     imgUrl = imgUrl.replace(/[\r\n]/g, "");
                     this.imgCode = imgUrl;
                     this.verifyCode = "";
-                    // this.showModal = false;
                     this.util("open");
                 }else{
                     let errStr = res.message;
@@ -187,7 +190,7 @@ export default {
         },
         //点击弹窗确认按钮 发送请求发送验证码
         async sendAuthCode(){
-            this.util("close");
+            
             let params = {
                 phone: this.username,
                 type: this.type,
@@ -195,11 +198,12 @@ export default {
             }
             const res = await api.querySendCode(params);
             if( res.code == "200" ){
+                this.util("close");
                 this.disabled = true;
                 this.showTime();
                 
             }else{
-                // this.showTopTipsFun(res.message);
+                this.getAuthCode();
                 let errStr = res.message;
                 wx.showToast({
                     title: errStr,
@@ -222,8 +226,6 @@ export default {
                     authCode: this.authCode,
                 }
                 const res = await api.queryNewEquipment(params);
-                
-                // console.log( res, "resresresres" )
                 if( res.code == "200" ){
                     const url = `../register/main?type=${this.type}&username=${this.username}&authcode=${this.authCode}`
                     wx.navigateTo({ url })
@@ -237,6 +239,28 @@ export default {
                 }
             }
             
+        },
+        //刷新验证码
+        async reloadVerifiCode(){
+            let params = {
+                phone: this.username,
+                type: this.type,
+                verifyCode: '',
+            }
+            const res = await api.querySendCode(params);
+            if( res.code == "200" ){
+                let imgUrl = res.result.value;
+                //清除base64格式中的空格及换行
+                imgUrl = imgUrl.replace(/[\r\n]/g, "");
+                this.imgCode = imgUrl;
+            }else{
+                let errStr = res.message;
+                wx.showToast({
+                    title: errStr,
+                    icon: 'none',
+                    duration: 2000//持续的时间
+                })
+            }
         }
   },
 
@@ -254,6 +278,15 @@ export default {
   onLoad(){
       this.showModal = false;
       this.type = this.$root.$mp.query.type;
+      if( this.type == 1 ){
+        wx.setNavigationBarTitle({
+            title: '注册'
+        })
+      }else if( this.type == 2 ){
+        wx.setNavigationBarTitle({
+            title: '重置密码'
+        })
+      }
       this.username = "";
       this.authCode = "";
   }
@@ -309,18 +342,22 @@ export default {
     background-color: #fff;
     color: #119a26;
 }
+.authcode_input{
+    border-bottom: 1px solid #ccc;
+}
 .weui-vcode-btn[disabled]:not([type]){
     background-color: #fff;
 }
 .weui-cell__ft img{
     width: 150px;
-    height: 80px;
-    vertical-align: middle;
+    height: 50px;
+    vertical-align: text-bottom;
+    margin-left: 5px;
 }
 
 .modal-wrap{
     display: flex;
-    align-items: center;
+    align-items: flex-end;
 }
 /*mask*/
 .drawer_screen { 
@@ -365,6 +402,8 @@ export default {
  text-align: center; 
  border-top: 1px solid #E8E8EA; 
  color: #3CC51F; 
+ width: 50%;
+ box-sizing: border-box;
 } 
   
 .top{ 
@@ -409,4 +448,20 @@ radio{
 .col-1 {-webkit-box-flex:1;box-flex:1;} 
 .fl { float: left;} 
 .fr { float: right;}
+.modal-footer{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+.modal-footer .btn_cancel{
+    padding: 10px; 
+    font: 20px "microsoft yahei"; 
+    text-align: center; 
+    border-top: 1px solid #E8E8EA; 
+    color: #000; 
+    flex: 1;
+    border-right: 1px solid #ccc;
+    box-sizing: border-box;
+}
 </style>

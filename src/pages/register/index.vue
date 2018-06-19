@@ -15,13 +15,7 @@
                 </div>
             </div>
         </div>
-        <div class="weui-cells__tips">
-            <a href="/pages/login/main">
-                已有账号，去登录！
-            </a>
-        </div>
-
-        <button class="login_btn" size="default" type="primary" @click="regisiter">注册</button>
+        <button class="login_btn" size="default" type="primary" @click="regisiter">{{btnText}}</button>
     </div>
 </template>
 
@@ -42,6 +36,7 @@ export default {
         showTopTips: false,
         tips: '',
         osType: '',
+        btnText: '',
     }
   },
 
@@ -116,6 +111,11 @@ export default {
         this.username = queryObj.username;
         this.authCode = queryObj.authcode;
         this.type = queryObj.type;
+        if( this.type == 1 ){
+            this.btnText = "注册";
+        }else if( this.type == 2 ){
+            this.btnText = "重置密码";
+        }
         var res = wx.getSystemInfoSync()
         if( res.platform == "ios" ){
             this.osType = 2;
