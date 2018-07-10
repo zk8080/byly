@@ -30,15 +30,15 @@
                     <div>
                         <input type="text" name="carRecommendBusinessName" v-model="carRecommendBusinessName" placeholder="请输入推荐人"/>
                     </div>
-                </div>  
+                </div>
             </div>
-            <div class="recommend-business" v-if="dataList.commodity_type_id == '228'"> 
+            <div class="recommend-business" v-if="dataList.commodity_type_id == '228'">
                 <text>门店:</text>
                 <div class="recommend-input">
                     <div>
                         <input type="text" name="carRecommendUser" v-model="carRecommendUser" placeholder="请输入门店"/>
                     </div>
-                </div>  
+                </div>
             </div>
             <div class="order-num clearfix">
                 <text class="fl">数量</text>
@@ -48,14 +48,14 @@
                         <input disabled='true' name="commoDityCount" :value='commoDityCount'/>
                         <img src="/static/images/add.png" @click='add'/>
                     </div>
-                </div>  
+                </div>
             </div>
         </div>
         <div class="pay_way">
             <img src="/static/images/pay.png" alt="">
             <span>支持微信支付</span>
         </div>
-        
+
         <div class="describe" v-for="(item, index) in describeImg" :key="index">
             <image mode="widthFix"  :src="baseUrl + item.imageUrl" alt="" />
         </div>
@@ -64,7 +64,11 @@
                 <text>立即购买</text>
             </div>
         </div>
-    </div>  
+        <div v-if="showBack" class="back-home" @click="goHome">
+          <img src="/static/images/back.png" alt="">
+          <p>返回首页</p>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -87,10 +91,11 @@ export default {
             carRecommendBusinessName: '',
             showTopTips: false,
             tips: '',
+            showBack: false,
         }
     },
     computed: {
-            
+
     },
     methods: {
 
@@ -98,11 +103,11 @@ export default {
             if (this.commoDityCount <= 1){
                 this.commoDityCount = 1;
             }else{
-            
+
                 var num = this.commoDityCount - 1;
                 this.commoDityCount = num;
             }
-            
+
         },
         add: function () {
             this.commoDityCount ++;
@@ -139,11 +144,11 @@ export default {
                     }
                 console.log( jsons, "jsons" )
                 //将对象转成json字符串， 不然后台无法拿到参数 参数会变成jsons[key]=value 后台需要jsons={key:value}
-                jsons = JSON.stringify(jsons);                            
+                jsons = JSON.stringify(jsons);
                 params = {
                     'jsons': jsons
                 }
-                
+
                 api.queryCarCouponIndentDispose(params)
                     .then( res => {
                         // console.log(res, "res")
@@ -216,17 +221,22 @@ export default {
                     });
                 }
             })
-        }
+        },
+        goHome(){
+          const url = '../type/main';
+          wx.switchTab({ url });
+        },
     },
     onShareAppMessage: function (res) {
-        let titleStr = this.dataList.commodity_name
+        let titleStr = this.dataList.commodity_name;
+        let dataStr = JSON.stringify(this.dataList);
         return {
             title: titleStr,
-            path: '/pages/goods_detail/main'
+            path: `/pages/goods_detail/main?data=${dataStr}&share=true`
         }
     },
     onShow(){
-        let storageObj =  wx.getStorageSync("loginInfo"); 
+        let storageObj =  wx.getStorageSync("loginInfo");
         this.userInfo = storageObj;
         this.orderShow = false;
         this.showFullPage = false;
@@ -236,7 +246,7 @@ export default {
         this.carRecommendUser = "";
     },
     onLoad(){
-        let storageObj =  wx.getStorageSync("loginInfo"); 
+        let storageObj =  wx.getStorageSync("loginInfo");
         this.userInfo = storageObj;
         this.showFullPage = false;
         this.orderShow = false;
@@ -244,6 +254,11 @@ export default {
         this.commoDityCount = 1;
         this.carRecommendBusinessName = '';
         this.carRecommendUser = "";
+        let queryObj = this.$root.$mp.query;
+        let query = this.$root.$mp.query;
+        if( query.share ){
+          this.showBack = true;
+        }
         let data = this.$root.$mp.query.data;
         data = JSON.parse(data);
         let imgList = JSON.parse(data.scroll_image_url);
@@ -419,7 +434,7 @@ swiper-item image{
 }
 .num-box{
     display: flex;
-    align-items: center; 
+    align-items: center;
 }
 /* .num-input div{
     float: right;
@@ -439,11 +454,11 @@ swiper-item image{
     background-color: #119a26;
     color: #fff;
     padding: 20rpx 0;
-    position: absolute;  
+    position: absolute;
     left: 0;
     bottom: 0;
     width: 100%;
-    z-index: 1000; 
+    z-index: 1000;
 }
 .show{
   display: block;
@@ -472,5 +487,23 @@ swiper-item image{
 .recommend-input {
     flex: 1;
     margin-left: 10px;
+}
+.back-home{
+  height: 32px;
+  display: flex;
+  align-items: center;
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 0 16px 16px 0;
+  width: 100px;
+  position: fixed;
+  top: 20px;
+  left: 0;
+  font-size: 16px;
+  color: #fff;
+  justify-content: center;
+}
+.back-home img{
+  height: 32rpx;
+  width: 32rpx;
 }
 </style>

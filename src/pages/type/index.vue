@@ -1,13 +1,13 @@
 <template>
   	<view class="container">
-	  	<div class="swiper-tab">  
-	      <!-- <view :class="currentTab==0 ? 'swiper-tab-list on' : 'swiper-tab-list'" data-current="0" @click="swichNav">水果</view>  
-	      <view :class="currentTab==1 ? 'swiper-tab-list on' : 'swiper-tab-list'" data-current="1" @click="swichNav">薯片</view>  
+	  	<div class="swiper-tab">
+	      <!-- <view :class="currentTab==0 ? 'swiper-tab-list on' : 'swiper-tab-list'" data-current="0" @click="swichNav">水果</view>
+	      <view :class="currentTab==1 ? 'swiper-tab-list on' : 'swiper-tab-list'" data-current="1" @click="swichNav">薯片</view>
 	      <view :class="currentTab==2 ? 'swiper-tab-list on' : 'swiper-tab-list'" data-current="2" @click="swichNav">辣条</view>
 	      <view :class="currentTab==3 ? 'swiper-tab-list on' : 'swiper-tab-list'" data-current="3" @click="swichNav">方便面</view>  -->
 
 
-          <div v-for="(item, index) in typeList" :key="index" :class="currentTab==index ? 'swiper-tab-list on' : 'swiper-tab-list'" :data-current="index" @click="swichNav">{{item.shortName}}</div>  
+          <div v-for="(item, index) in typeList" :key="index" :class="currentTab==index ? 'swiper-tab-list on' : 'swiper-tab-list'" :data-current="index" @click="swichNav">{{item.shortName}}</div>
 	  	</div>
 	  	<div class="swiper-cont">
 		    <div v-for="(item, index) in typeList" :key="index" :class="currentTab==index ? 'swiper-cont-list cur' : 'swiper-cont-list'">
@@ -19,7 +19,7 @@
                         <div class="weui-media-box__bd weui-media-box__bd_in-appmsg">
                             <div class="weui-media-box__title">{{detailItem.commodity_name}}</div>
                             <div class="weui-media-box__desc">{{detailItem.commodity_describe}}</div>
-                            <div class="price">¥{{detailItem.terminalPrice}}</div> 
+                            <div class="price">¥{{detailItem.terminalPrice}}</div>
                             <div class="weui-media-box__desc">{{detailItem.valid}}</div>
                         </div>
                     </a>
@@ -33,7 +33,7 @@
 import api from '../../utils/api';
 
 export default {
-    
+
     data () {
         return{
             vertical: true,
@@ -57,7 +57,6 @@ export default {
             this.currentTab = e.target.current
         },
         gotoDetail(obj){
-            console.log( obj, "obj" )
             let dataStr = JSON.stringify(obj);
             const url = `../goods_detail/main?data=${dataStr}`;
             wx.navigateTo({url});
@@ -103,8 +102,17 @@ export default {
     onShow() {
         this.currentTab = 0,
         this.getTypeData();
+    },
+    onLoad(){
+      let query = this.$root.$mp.query;
+      if( query.share ){
+        let data = this.$root.$mp.query.data;
+        // data = JSON.parse(data);
+        const url = `../goods_detail/main?data=${data}`;
+        wx.navigateTo(url)
+      }
     }
-  
+
 }
 </script>
 

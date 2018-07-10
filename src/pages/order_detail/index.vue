@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    
+
     <div class="voucher">
         <div class="title">
           <p>{{dataObj.commodity_name}}</p>
@@ -21,11 +21,7 @@
             <p>{{dataObj.commodity_describe}}</p>
         </div>
         <div class="timer">
-          <p v-if="errorFlag" class="error">
-            该二维码已失效，请重新查看二维码
-          </p> 
-          <p v-else>二维码仅可使用一次（{{timer}}s失效）</p>
-          
+          <p>二维码仅可使用一次（{{timer}}s失效）</p>
         </div>
       </div>
   </div>
@@ -79,14 +75,14 @@ export default {
         } catch (e) {
           // Do something when catch error
           console.log("获取设备信息失败"+e);
-        } 
+        }
       return size;
     } ,
     createQrCode:function(url,canvasId,cavW,cavH){
       //调用插件中的draw方法，绘制二维码图片
       QR.api.draw(url,canvasId,cavW,cavH);
       setTimeout(() => { this.canvasToTempImage();},1000);
-      
+
     },
     //获取临时缓存照片路径，存入data中
     canvasToTempImage:function(){
@@ -117,8 +113,8 @@ export default {
           aging--;
           this.timer = aging;
           if (aging <= 0) {
-              clearInterval(this.interval)
-              this.errorFlag = true;
+              clearInterval(this.interval);
+              this.getData()
           }
       }, 1000)
     }
@@ -127,19 +123,19 @@ export default {
 
   },
   onshow(){
-    let storageObj =  wx.getStorageSync("loginInfo"); 
+    let storageObj =  wx.getStorageSync("loginInfo");
     this.cardId = storageObj.userId;
     clearInterval(this.interval);
     // this.aging = 120;
     this.getData();
   },
   onLoad(){
-    let storageObj =  wx.getStorageSync("loginInfo"); 
+    let storageObj =  wx.getStorageSync("loginInfo");
     this.userId = storageObj.userId;
     let cardId = this.$root.$mp.query.cardId;
     this.cardId = cardId;
     let aging = this.$root.$mp.query.aging;
-    
+
     this.aging = aging;
     this.timer = aging;
     this.getData();

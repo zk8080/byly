@@ -18,16 +18,16 @@
                 </div>
             </div>
         </div>
-        
+
         <button class="login_btn" size="default" type="primary" @click="VerifiCode">下一步</button>
-        <div class="drawer_screen" @click="powerDrawer" data-statu="close" v-if="showModal"></div> 
+        <div class="drawer_screen" @click="powerDrawer" data-statu="close" v-if="showModal"></div>
         <!--content-->
         <!--使用animation属性指定需要执行的动画-->
-        <div :animation="animationData" class="drawer_box" v-if="showModal"> 
-        
+        <div :animation="animationData" class="drawer_box" v-if="showModal">
+
         <!--drawer content-->
-            <div class="drawer_title">填写图形码</div> 
-            <div class="drawer_content"> 
+            <div class="drawer_title">填写图形码</div>
+            <div class="drawer_content">
                 <div class="modal-wrap">
                     <div class="weui-cell__bd">
                         <input class="weui-input authcode_input" type="text" @change="getVerifyCode" name="verifyCode" v-model="verifyCode" placeholder="请输入图形码"/>
@@ -36,12 +36,12 @@
                         <img :src="'data:image/png;base64,' + imgCode" />
                     </div>
                 </div>
-            </div> 
+            </div>
             <div class="modal-footer">
                 <div class="btn_cancel" @click="powerDrawer" data-statu="close">取消</div>
                 <div class="btn_ok" @click="sendAuthCode" data-statu="close">确定</div>
             </div>
-             
+
         </div>
     </div>
 </template>
@@ -76,7 +76,7 @@ export default {
 
   methods: {
         getuserName(e){
-            
+
             this.username = e.target.value;
         },
         getauthCode(e){
@@ -101,9 +101,9 @@ export default {
                     clearInterval(this.timeInterval)
                     this.time = '重新发送',
                     this.currentTime = 61,
-                    this.disabled = false;   
+                    this.disabled = false;
                 }
-            }, 1000)  
+            }, 1000)
         },
         showTopTipsFun(tipStr) {
             this.showTopTips = true;
@@ -116,51 +116,51 @@ export default {
         cancel(){
             this.showModal = true;
         },
-        powerDrawer: function (e) { 
-            var currentStatu = e.currentTarget.dataset.statu;  
-            this.util(currentStatu); 
-        }, 
-        util: function(currentStatu){ 
-            /* 动画部分 */ 
-            // 第1步：创建动画实例   
-            var animation = wx.createAnimation({ 
-                duration: 200,  //动画时长  
-                timingFunction: "linear", //线性  
-                delay: 0  //0则不延迟  
-            });  
-            
-            // 第2步：这个动画实例赋给当前的动画实例  
-            this.animation = animation;  
-        
-            // 第3步：执行第一组动画  
-            animation.opacity(0).rotateX(-100).step();  
-        
-            // 第4步：导出动画对象赋给数据对象储存  
+        powerDrawer: function (e) {
+            var currentStatu = e.currentTarget.dataset.statu;
+            this.util(currentStatu);
+        },
+        util: function(currentStatu){
+            /* 动画部分 */
+            // 第1步：创建动画实例
+            var animation = wx.createAnimation({
+                duration: 200,  //动画时长
+                timingFunction: "linear", //线性
+                delay: 0  //0则不延迟
+            });
 
-            this.animationData = animation.export() 
-            
-            // 第5步：设置定时器到指定时候后，执行第二组动画  
-            setTimeout(function () { 
-                // 执行第二组动画  
-                animation.opacity(1).rotateX(0).step();  
-                // 给数据对象储存的第一组动画，更替为执行完第二组动画的动画对象  
-                this.animationData = animation  
-                
-                //关闭  
-                if (currentStatu == "close") { 
-                    this.showModal = false; 
-                } 
-            }.bind(this), 200) 
-            
-            // 显示  
-            if (currentStatu == "open") { 
-                this.showModal = true; 
-            } 
-        }, 
-        
+            // 第2步：这个动画实例赋给当前的动画实例
+            this.animation = animation;
+
+            // 第3步：执行第一组动画
+            animation.opacity(0).rotateX(-100).step();
+
+            // 第4步：导出动画对象赋给数据对象储存
+
+            this.animationData = animation.export()
+
+            // 第5步：设置定时器到指定时候后，执行第二组动画
+            setTimeout(function () {
+                // 执行第二组动画
+                animation.opacity(1).rotateX(0).step();
+                // 给数据对象储存的第一组动画，更替为执行完第二组动画的动画对象
+                this.animationData = animation
+
+                //关闭
+                if (currentStatu == "close") {
+                    this.showModal = false;
+                }
+            }.bind(this), 200)
+
+            // 显示
+            if (currentStatu == "open") {
+                this.showModal = true;
+            }
+        },
+
         //点击获取验证码按钮 获取图形码
         async getAuthCode(){
-            
+
             if(this.username == '' ){
                 this.showTopTipsFun('请输入手机号！')
             }else{
@@ -186,11 +186,11 @@ export default {
                     })
                 }
             }
-            
+
         },
         //点击弹窗确认按钮 发送请求发送验证码
         async sendAuthCode(){
-            
+
             let params = {
                 phone: this.username,
                 type: this.type,
@@ -201,7 +201,7 @@ export default {
                 this.util("close");
                 this.disabled = true;
                 this.showTime();
-                
+
             }else{
                 this.getAuthCode();
                 let errStr = res.message;
@@ -238,7 +238,7 @@ export default {
                     })
                 }
             }
-            
+
         },
         //刷新验证码
         async reloadVerifiCode(){
@@ -268,12 +268,17 @@ export default {
     // 调用应用实例的方法获取全局数据
   },
   onShow(){
-      console.log(111342)
         clearInterval(this.timeInterval);
         this.showModal = false;
-        this.time = '获取验证码';
+        // this.time = '获取验证码';
         this.currentTime = 61;
         this.disabled = false;
+  },
+  onHide(){
+    this.time = '获取验证码';
+  },
+  onUnload(){
+    this.time = '获取验证码';
   },
   onLoad(){
       this.showModal = false;
@@ -289,6 +294,7 @@ export default {
       }
       this.username = "";
       this.authCode = "";
+      this.time = '获取验证码';
   }
 }
 </script>
@@ -360,93 +366,93 @@ export default {
     align-items: flex-end;
 }
 /*mask*/
-.drawer_screen { 
- width: 100%; 
- height: 100%; 
- position: fixed; 
- top: 0; 
- left: 0; 
- z-index: 1000; 
- background: #000; 
- opacity: 0.5; 
- overflow: hidden; 
-} 
-  
+.drawer_screen {
+ width: 100%;
+ height: 100%;
+ position: fixed;
+ top: 0;
+ left: 0;
+ z-index: 1000;
+ background: #000;
+ opacity: 0.5;
+ overflow: hidden;
+}
+
 /*content*/
-.drawer_box { 
- width: 80%; 
- overflow: hidden; 
- position: fixed; 
- top: 50%; 
- left: 0; 
- z-index: 1001; 
- background: #FAFAFA; 
- margin: -50% 10% 0 10%; 
- border-radius: 3px; 
-} 
-  
-.drawer_title{ 
- padding:15px; 
- font: 20px "microsoft yahei"; 
- text-align: center; 
-} 
-.drawer_content { 
+.drawer_box {
+ width: 80%;
+ overflow: hidden;
+ position: fixed;
+ top: 50%;
+ left: 0;
+ z-index: 1001;
+ background: #FAFAFA;
+ margin: -50% 10% 0 10%;
+ border-radius: 3px;
+}
+
+.drawer_title{
+ padding:15px;
+ font: 20px "microsoft yahei";
+ text-align: center;
+}
+.drawer_content {
  /* height: 210px;  */
  overflow-y: scroll; /*超出父盒子高度可滚动*/
  padding: 10px;
-} 
-  
-.btn_ok{ 
- padding: 10px; 
- font: 20px "microsoft yahei"; 
- text-align: center; 
- border-top: 1px solid #E8E8EA; 
- color: #3CC51F; 
+}
+
+.btn_ok{
+ padding: 10px;
+ font: 20px "microsoft yahei";
+ text-align: center;
+ border-top: 1px solid #E8E8EA;
+ color: #3CC51F;
  width: 50%;
  box-sizing: border-box;
-} 
-  
-.top{ 
- padding-top:8px; 
-} 
-.bottom { 
- padding-bottom:8px; 
-} 
-.title { 
- height: 30px; 
- line-height: 30px; 
- width: 160rpx; 
- text-align: center; 
- display: inline-block; 
- font: 300 28rpx/30px "microsoft yahei"; 
-} 
-  
-.input_base { 
- border: 2rpx solid #ccc; 
- padding-left: 10rpx; 
- margin-right: 50rpx; 
-} 
-.input_h30{ 
- height: 30px; 
- line-height: 30px; 
-} 
-.input_h60{ 
- height: 60px; 
-} 
-.input_view{ 
- font: 12px "microsoft yahei"; 
- background: #fff; 
- color:#000; 
- line-height: 30px; 
-} 
+}
 
-radio{ 
- margin-right: 20px; 
-} 
-.grid { display: -webkit-box; display: box; } 
-.col-0 {-webkit-box-flex:0;box-flex:0;} 
-.col-1 {-webkit-box-flex:1;box-flex:1;} 
-.fl { float: left;} 
+.top{
+ padding-top:8px;
+}
+.bottom {
+ padding-bottom:8px;
+}
+.title {
+ height: 30px;
+ line-height: 30px;
+ width: 160rpx;
+ text-align: center;
+ display: inline-block;
+ font: 300 28rpx/30px "microsoft yahei";
+}
+
+.input_base {
+ border: 2rpx solid #ccc;
+ padding-left: 10rpx;
+ margin-right: 50rpx;
+}
+.input_h30{
+ height: 30px;
+ line-height: 30px;
+}
+.input_h60{
+ height: 60px;
+}
+.input_view{
+ font: 12px "microsoft yahei";
+ background: #fff;
+ color:#000;
+ line-height: 30px;
+}
+
+radio{
+ margin-right: 20px;
+}
+.grid { display: -webkit-box; display: box; }
+.col-0 {-webkit-box-flex:0;box-flex:0;}
+.col-1 {-webkit-box-flex:1;box-flex:1;}
+.fl { float: left;}
 .fr { float: right;}
 .modal-footer{
     display: flex;
@@ -455,11 +461,11 @@ radio{
     box-sizing: border-box;
 }
 .modal-footer .btn_cancel{
-    padding: 10px; 
-    font: 20px "microsoft yahei"; 
-    text-align: center; 
-    border-top: 1px solid #E8E8EA; 
-    color: #000; 
+    padding: 10px;
+    font: 20px "microsoft yahei";
+    text-align: center;
+    border-top: 1px solid #E8E8EA;
+    color: #000;
     flex: 1;
     border-right: 1px solid #ccc;
     box-sizing: border-box;

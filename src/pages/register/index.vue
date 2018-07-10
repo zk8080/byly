@@ -22,8 +22,8 @@
 <script>
 import api from '../../utils/api';
 // import config from '../../config.js'
-//index.js  
-var md5 = require('../../utils/md5.js')  
+//index.js
+var md5 = require('../../utils/md5.js')
 
 export default {
   data () {
@@ -54,6 +54,14 @@ export default {
             }, 2000)
         },
         regisiter(){
+            if( this.password == '' ){
+              this.showTopTipsFun("请输入密码！");
+              return false;
+            }
+            if( this.againPwd == '' ){
+              this.showTopTipsFun("请输入密码！");
+              return false;
+            }
             if( this.password != this.againPwd ){
                 this.showTopTipsFun("两次密码不一样！");
             }else{
@@ -93,13 +101,13 @@ export default {
                             })
                             .catch( err => {
                                 console.log(err)
-                            })   
-                        
+                            })
+
                     }
-                })   
+                })
             }
-            
-            
+
+
         }
   },
 

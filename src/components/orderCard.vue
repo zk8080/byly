@@ -1,45 +1,38 @@
 <template>
   <div>
-    <a :href="'/pages/order_detail/main?cardId=' + orderData.card_ID + '&aging=' + aging">
+    <a :href="jumpFlag ? '/pages/order_detail/main?cardId=' + orderData.card_ID + '&aging=' + aging: '' ">
       <div class="order-item"  >
         <!-- <div class="header">
             <text class="fl">订单编号：{{orderData.orderNo}}</text>
-            <text class="fr">{{orderData.status}}</text>  
+            <text class="fr">{{orderData.status}}</text>
         </div> -->
         <div class="order-detail">
-            <div class="order-img">
-                <img src="/static/images/order_img.png">
-            </div>
+
             <div class="order-title">
                 <text class="title">{{orderData.commodity_name}}</text>
                 <div class='describe'>
                     <text class="num">{{orderData.commodity_describe}}</text>
                 </div>
+                <div>
+                  <text class="price">¥{{orderData.commoDitycost}}</text>
+                </div>
                 <div class='company_name'>
                     <text class="num">{{orderData.company_name}}</text>
                 </div>
             </div>
-        </div>
-        <!-- <div class="time">
-                <text>{{orderData.time}}</text>
-        </div> -->
-        <!-- <div class="address">
-                <text>地址：{{orderData.address}}</text>
-        </div> -->
-        
-        <div class="ewm clearfix">
-          <text class="price">¥{{orderData.commoDitycost}}</text>
-          <text class="fr">查看二维码></text>
+            <div class="order-img">
+                <img src="/static/images/order_img.png">
+            </div>
         </div>
       </div>
     </a>
-    
+
   </div>
 </template>
 
 <script>
 export default {
-  props: ['orderData', 'aging']
+  props: ['orderData', 'aging', 'jumpFlag']
 }
 </script>
 
@@ -69,7 +62,6 @@ export default {
   display: flex;
   align-items: center;
   width: 180rpx;
-  height: 180rpx;
 }
 .order-img img{
   width: 100%;
@@ -85,7 +77,7 @@ export default {
 .order-title .title{
   display: block;
   /* margin-top: 50rpx; */
-  font-size: 22px;
+  font-size: 24px;
   color:#FFE21E;
 }
 .order-title .describe{
@@ -96,7 +88,7 @@ export default {
   white-space:nowrap;
 }
 .company_name{
-  font-size: 22px;
+  font-size: 20px;
 }
 .order-title .totalprice .num{
   color: #707070;
@@ -128,6 +120,6 @@ export default {
 }
 .ewm .price{
   /* color: red; */
-  
+
 }
 </style>

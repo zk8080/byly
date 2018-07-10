@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    
+
     <div v-if="userInfo" class="page__bd">
       <div class="weui-tab">
         <div class="weui-navbar">
@@ -13,19 +13,19 @@
         </div>
         <div class="weui-tab__panel">
           <div class="weui-tab__content"  :hidden="activeIndex != 0">
-              <orderCard v-for="( orderItem, orderIndex ) in orderList" :key="orderIndex"  :orderData="orderItem" :aging="aging"></orderCard>
+              <orderCard v-for="( orderItem, orderIndex ) in orderList" :key="orderIndex"  :orderData="orderItem" :aging="aging" :jumpFlag="true"></orderCard>
               <p class="noOrder" v-if="hasOrder">
                 暂无订单
               </p>
           </div>
           <div class="weui-tab__content"  :hidden="activeIndex != 1">
-              <orderCard v-for="( orderItem, orderIndex ) in orderList" :key="orderIndex"  :orderData="orderItem" :aging="aging"></orderCard>
+              <orderCard v-for="( orderItem, orderIndex ) in orderList" :key="orderIndex"  :orderData="orderItem" :aging="aging" :jumpFlag="false"></orderCard>
               <p class="noOrder" v-if="hasOrder">
                 暂无订单
               </p>
           </div>
           <div class="weui-tab__content"  :hidden="activeIndex != 2">
-              <orderCard v-for="( orderItem, orderIndex ) in orderList" :key="orderIndex"  :orderData="orderItem" :aging="aging"></orderCard>
+              <orderCard v-for="( orderItem, orderIndex ) in orderList" :key="orderIndex"  :orderData="orderItem" :aging="aging" :jumpFlag="false"></orderCard>
               <p class="noOrder" v-if="hasOrder">
                 暂无订单
               </p>
@@ -113,23 +113,23 @@ export default {
     }
   },
   mounted(){
-    
+
   },
   onHide (){
-    
+
   },
   onShow(){
     this.activeIndex = 0;
-    let storageObj =  wx.getStorageSync("loginInfo"); 
+    let storageObj =  wx.getStorageSync("loginInfo");
     this.userInfo = storageObj;
     if( this.userInfo.userId ){
       this.getData();
     }
-    
+
   },
   onLoad(){
     this.activeIndex = 0;
-    let storageObj =  wx.getStorageSync("loginInfo"); 
+    let storageObj =  wx.getStorageSync("loginInfo");
     this.userInfo = storageObj;
     if( this.userInfo.userId ){
       this.getData();
