@@ -79,6 +79,10 @@ export default {
   /* margin-top: 50rpx; */
   font-size: 24px;
   color:#FFE21E;
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow:hidden;
+  white-space:nowrap;
 }
 .order-title .describe{
   width: 100%;

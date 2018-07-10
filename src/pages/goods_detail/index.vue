@@ -236,24 +236,29 @@ export default {
         }
     },
     onShow(){
-        let storageObj =  wx.getStorageSync("loginInfo");
-        this.userInfo = storageObj;
-        this.orderShow = false;
-        this.showFullPage = false;
-        this.orderEnd = false;
-        this.commoDityCount = 1;
-        this.carRecommendBusinessName = '';
-        this.carRecommendUser = "";
+        // let storageObj =  wx.getStorageSync("loginInfo");
+        // this.userInfo = storageObj;
+        // this.orderShow = false;
+        // this.showFullPage = false;
+        // this.orderEnd = false;
+        // this.commoDityCount = 1;
+        // this.carRecommendBusinessName = '';
+        // this.carRecommendUser = "";
+    },
+    onUnload(){
+        if (this.$options.data) {
+          Object.assign(this.$data, this.$options.data())
+        }
     },
     onLoad(){
         let storageObj =  wx.getStorageSync("loginInfo");
         this.userInfo = storageObj;
-        this.showFullPage = false;
-        this.orderShow = false;
-        this.orderEnd = false;
-        this.commoDityCount = 1;
-        this.carRecommendBusinessName = '';
-        this.carRecommendUser = "";
+        // this.showFullPage = false;
+        // this.orderShow = false;
+        // this.orderEnd = false;
+        // this.commoDityCount = 1;
+        // this.carRecommendBusinessName = '';
+        // this.carRecommendUser = "";
         let queryObj = this.$root.$mp.query;
         let query = this.$root.$mp.query;
         if( query.share ){
