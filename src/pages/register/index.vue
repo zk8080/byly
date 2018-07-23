@@ -85,6 +85,8 @@ export default {
                                         icon: 'none',
                                         duration: 2000//持续的时间
                                     })
+                                    //存储用户密码
+                                    wx.setStorageSync( 'password', userPwdStr );
                                     const data = res.result;
                                     //存储用户信息
                                     wx.setStorageSync( 'loginInfo', data );
