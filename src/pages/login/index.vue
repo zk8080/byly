@@ -27,29 +27,29 @@
         </div>
 
         <button class="login_btn" size="default" type="primary" @click="login">登录</button>
-        <div class="drawer_screen" @click="powerDrawer" data-statu="close" v-if="showModal"></div> 
+        <div class="drawer_screen" @click="powerDrawer" data-statu="close" v-if="showModal"></div>
         <!--content-->
         <!--使用animation属性指定需要执行的动画-->
-        <div :animation="animationData" class="drawer_box" v-if="showModal"> 
-        
+        <div :animation="animationData" class="drawer_box" v-if="showModal">
+
         <!--drawer content-->
-            <div class="drawer_title">请输入验证码</div> 
-            <div class="drawer_content"> 
+            <div class="drawer_title">请输入验证码</div>
+            <div class="drawer_content">
                 <div class="modal-wrap">
                     <div class="weui-cell__bd">
                         <input class="weui-input" type="text" name="authCode" v-model="authCode" placeholder="请输入验证码"/>
                     </div>
                 </div>
-            </div> 
-            <div class="btn_ok" @click="queryNewEquipment" data-statu="close">确定</div> 
+            </div>
+            <div class="btn_ok" @click="queryNewEquipment" data-statu="close">确定</div>
         </div>
     </div>
 </template>
 
 <script>
 import api from '../../utils/api';
-//index.js  
-var md5 = require('../../utils/md5.js')  
+//index.js
+var md5 = require('../../utils/md5.js')
 
 export default {
   data () {
@@ -79,47 +79,47 @@ export default {
                 this.tips = "";
             }, 2000)
         },
-        powerDrawer: function (e) { 
-            var currentStatu = e.currentTarget.dataset.statu;  
-            this.util(currentStatu); 
-        }, 
-        util: function(currentStatu){ 
-            /* 动画部分 */ 
-            // 第1步：创建动画实例   
-            var animation = wx.createAnimation({ 
-                duration: 200,  //动画时长  
-                timingFunction: "linear", //线性  
-                delay: 0  //0则不延迟  
-            });  
-            
-            // 第2步：这个动画实例赋给当前的动画实例  
-            this.animation = animation;  
-        
-            // 第3步：执行第一组动画  
-            animation.opacity(0).rotateX(-100).step();  
-        
-            // 第4步：导出动画对象赋给数据对象储存  
+        powerDrawer: function (e) {
+            var currentStatu = e.currentTarget.dataset.statu;
+            this.util(currentStatu);
+        },
+        util: function(currentStatu){
+            /* 动画部分 */
+            // 第1步：创建动画实例
+            var animation = wx.createAnimation({
+                duration: 200,  //动画时长
+                timingFunction: "linear", //线性
+                delay: 0  //0则不延迟
+            });
 
-            this.animationData = animation.export() 
-            
-            // 第5步：设置定时器到指定时候后，执行第二组动画  
-            setTimeout(function () { 
-                // 执行第二组动画  
-                animation.opacity(1).rotateX(0).step();  
-                // 给数据对象储存的第一组动画，更替为执行完第二组动画的动画对象  
-                this.animationData = animation  
-                
-                //关闭  
-                if (currentStatu == "close") { 
-                    this.showModal = false; 
-                } 
-            }.bind(this), 200) 
-            
-            // 显示  
-            if (currentStatu == "open") { 
-                this.showModal = true; 
-            } 
-        }, 
+            // 第2步：这个动画实例赋给当前的动画实例
+            this.animation = animation;
+
+            // 第3步：执行第一组动画
+            animation.opacity(0).rotateX(-100).step();
+
+            // 第4步：导出动画对象赋给数据对象储存
+
+            this.animationData = animation.export()
+
+            // 第5步：设置定时器到指定时候后，执行第二组动画
+            setTimeout(function () {
+                // 执行第二组动画
+                animation.opacity(1).rotateX(0).step();
+                // 给数据对象储存的第一组动画，更替为执行完第二组动画的动画对象
+                this.animationData = animation
+
+                //关闭
+                if (currentStatu == "close") {
+                    this.showModal = false;
+                }
+            }.bind(this), 200)
+
+            // 显示
+            if (currentStatu == "open") {
+                this.showModal = true;
+            }
+        },
         login(){
             if( this.username == "" ){
                 this.showTopTipsFun('用户名不能为空');
@@ -137,13 +137,14 @@ export default {
                             };
                             api.queryLogin(params).then( res=> {
                                 if( res.code == "200" ){
-                                    
+                                    //存储用户密码
+                                    wx.setStorageSync( 'password', userPwdStr );
                                     const data = res.result;
                                     //存储用户信息
                                     wx.setStorageSync( 'loginInfo', data );
                                     const url = "../personal/main";
                                     wx.switchTab({ url });
-                                }else if(res.code == "220"){ 
+                                }else if(res.code == "220"){
                                     this.showModal = true;
 
                                     // const data = res.result;
@@ -160,7 +161,7 @@ export default {
                                     });
                                 }
                             });
-                            
+
                         })
                     }
                 })
@@ -203,13 +204,13 @@ export default {
                                         });
                                     }
                                 } )
-                            
+
                         }
                     }
                 });
-                
+
             }
-            
+
         }
   },
 
@@ -277,47 +278,47 @@ export default {
     margin-top: 30px;
 }
 /*mask*/
-.drawer_screen { 
- width: 100%; 
- height: 100%; 
- position: fixed; 
- top: 0; 
- left: 0; 
- z-index: 1000; 
- background: #000; 
- opacity: 0.5; 
- overflow: hidden; 
-} 
-  
+.drawer_screen {
+ width: 100%;
+ height: 100%;
+ position: fixed;
+ top: 0;
+ left: 0;
+ z-index: 1000;
+ background: #000;
+ opacity: 0.5;
+ overflow: hidden;
+}
+
 /*content*/
-.drawer_box { 
- width: 80%; 
- overflow: hidden; 
- position: fixed; 
- top: 50%; 
- left: 0; 
- z-index: 1001; 
- background: #FAFAFA; 
- margin: -50% 10% 0 10%; 
- border-radius: 3px; 
-} 
-  
-.drawer_title{ 
- padding:15px; 
- font: 20px "microsoft yahei"; 
- text-align: center; 
-} 
-.drawer_content { 
+.drawer_box {
+ width: 80%;
+ overflow: hidden;
+ position: fixed;
+ top: 50%;
+ left: 0;
+ z-index: 1001;
+ background: #FAFAFA;
+ margin: -50% 10% 0 10%;
+ border-radius: 3px;
+}
+
+.drawer_title{
+ padding:15px;
+ font: 20px "microsoft yahei";
+ text-align: center;
+}
+.drawer_content {
  /* height: 210px;  */
  overflow-y: scroll; /*超出父盒子高度可滚动*/
  padding: 10px;
-} 
-  
-.btn_ok{ 
- padding: 10px; 
- font: 20px "microsoft yahei"; 
- text-align: center; 
- border-top: 1px solid #E8E8EA; 
- color: #3CC51F; 
-} 
+}
+
+.btn_ok{
+ padding: 10px;
+ font: 20px "microsoft yahei";
+ text-align: center;
+ border-top: 1px solid #E8E8EA;
+ color: #3CC51F;
+}
 </style>

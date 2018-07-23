@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="company-infor">
-      
+
       <div class="website" @click="gotoOrder">
         <a href="/pages/order/main">
           <div>
@@ -28,7 +28,7 @@
         </a>
       </div>
       <div class="about">
-        <a href="">
+        <a href="../about/main">
           <div>
             <img src="/static/images/about.png" alt="">
             <text>关于我们</text>
@@ -88,7 +88,7 @@ export default {
             const url = '../personal/main';
             wx.reLaunch({ url });
           } else {
-            
+
           }
         }
       });
@@ -96,16 +96,16 @@ export default {
   },
 
   created () {
-    
+
   },
   onShow(){
     console.log(222)
-    let storageObj =  wx.getStorageSync("loginInfo"); 
+    let storageObj =  wx.getStorageSync("loginInfo");
     this.userInfo = storageObj;
   },
   onLoad(){
     console.log(111)
-    let storageObj =  wx.getStorageSync("loginInfo"); 
+    let storageObj =  wx.getStorageSync("loginInfo");
     this.userInfo = storageObj;
   }
 }

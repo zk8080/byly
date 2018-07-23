@@ -18,16 +18,17 @@ export default {
   config: {
     // 页面前带有 ^ 符号的，会被编译成首页，其他页面可以选填，我们会自动把 webpack entry 里面的入口页面加进去
     pages: [
-        'pages/personal/main', 
-        'pages/order/main', 
-        '^pages/type/main', 
-        'pages/login/main', 
-        'pages/register/main', 
-        'pages/goods_detail/main', 
+        'pages/personal/main',
+        'pages/order/main',
+        '^pages/type/main',
+        'pages/login/main',
+        'pages/register/main',
+        'pages/goods_detail/main',
         'pages/order_detail/main',
-        'pages/msg-success/main',    
-        'pages/authCode/main',       
-        'pages/service_center/main',  
+        'pages/msg-success/main',
+        'pages/authCode/main',
+        'pages/service_center/main',
+        'pages/about/main'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -43,13 +44,13 @@ export default {
           "text": "分类",
           "iconPath": "/static/images/type.png",
           "selectedIconPath": "/static/images/type_active.png"
-        }, 
+        },
         {
           "pagePath": "pages/order/main",
           "text": "订单",
           "iconPath": "/static/images/order.png",
           "selectedIconPath": "/static/images/order_active.png"
-        }, 
+        },
         {
           "pagePath": "pages/personal/main",
           "text": "我的",

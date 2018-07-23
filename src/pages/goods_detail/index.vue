@@ -28,7 +28,7 @@
                 <text>推荐人:</text>
                 <div class="recommend-input">
                     <div>
-                        <input type="text" name="carRecommendBusinessName" v-model="carRecommendBusinessName" placeholder="请输入推荐人"/>
+                        <input type="text" name="carRecommendBusinessName" :cursor-spacing="inputSpace" v-model="carRecommendBusinessName" placeholder="请输入推荐人"/>
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                 <text>门店:</text>
                 <div class="recommend-input">
                     <div>
-                        <input type="text" name="carRecommendUser" v-model="carRecommendUser" placeholder="请输入门店"/>
+                        <input type="text" name="carRecommendUser" :cursor-spacing="inputSpace" v-model="carRecommendUser" placeholder="请输入门店"/>
                     </div>
                 </div>
             </div>
@@ -92,6 +92,8 @@ export default {
             showTopTips: false,
             tips: '',
             showBack: false,
+            inputSpace: 10,
+            password:"",
         }
     },
     computed: {
@@ -128,7 +130,6 @@ export default {
                         return;
                     }
                 }
-
                 let params = '';
                 let jsons = {
                         businessId: this.dataList.business_company_id,
@@ -141,8 +142,9 @@ export default {
                         carType: this.dataList.commodity_distinction,
                         carRecommendBusinessName: this.carRecommendBusinessName,
                         carRecommendUser: this.carRecommendUser,
+                        password: this.password,
                     }
-                console.log( jsons, "jsons" )
+
                 //将对象转成json字符串， 不然后台无法拿到参数 参数会变成jsons[key]=value 后台需要jsons={key:value}
                 jsons = JSON.stringify(jsons);
                 params = {
@@ -183,7 +185,18 @@ export default {
                                         })
                                     }
                                 })
-                        }else{
+                        }else if(res.code == "201") {
+                          let errStr = res.message;
+                          wx.showToast({
+                              title: errStr,
+                              icon: 'none',
+                              duration: 2000//持续的时间
+                          })
+                          wx.clearStorageSync();
+                          const url = '../login/main';
+                          wx.reLaunch({ url });
+                        }
+                        else{
                             let errStr = res.message;
                             wx.showToast({
                                 title: errStr,
@@ -252,7 +265,9 @@ export default {
     },
     onLoad(){
         let storageObj =  wx.getStorageSync("loginInfo");
+        let password =  wx.getStorageSync("password");
         this.userInfo = storageObj;
+        this.password = password;
         // this.showFullPage = false;
         // this.orderShow = false;
         // this.orderEnd = false;
