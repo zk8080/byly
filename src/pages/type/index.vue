@@ -99,6 +99,12 @@ export default {
             }
         },
     },
+    onShareAppMessage: function (res) {
+      return {
+          title: '宝燕乐园',
+          path: `/pages/type/main`
+      }
+    },
     onShow() {
         this.currentTab = 0,
         this.getTypeData();

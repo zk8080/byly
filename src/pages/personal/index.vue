@@ -42,6 +42,7 @@
             <img src="/static/images/tel.png" alt="">
             <text>服务中心</text>
           </div>
+          <img src="/static/images/arrowright.png" alt="">
         </a>
       </div>
       <div v-if="userInfo.userName" class="logout">
@@ -94,7 +95,12 @@ export default {
       });
     }
   },
-
+  onShareAppMessage: function (res) {
+      return {
+          title: '宝燕乐园',
+          path: `/pages/type/main`
+      }
+  },
   created () {
 
   },

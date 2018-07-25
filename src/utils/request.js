@@ -2,7 +2,7 @@ import Fly from "flyio/dist/npm/wx";
 
 const request = new Fly()
 
-request.config.baseURL='https://byloft.top';
+request.config.baseURL='https://baoyanmall.cn';
 
 request.interceptors.request.use((request) => {
   // wx.showNavigationBarLoading()
@@ -20,7 +20,7 @@ request.interceptors.response.use(
     // wx.hideNavigationBarLoading()
     wx.hideLoading();
     return promise.resolve(response.data)
-    
+
   },
   (err, promise) => {
     // wx.hideNavigationBarLoading()

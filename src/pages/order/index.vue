@@ -74,6 +74,12 @@ export default {
       }
     }
   },
+  onShareAppMessage: function (res) {
+      return {
+          title: '宝燕乐园',
+          path: `/pages/type/main`
+      }
+  },
   methods: {
     tabClick(e) {
       // console.log(e);

@@ -268,16 +268,18 @@ export default {
     // 调用应用实例的方法获取全局数据
   },
   onShow(){
-        clearInterval(this.timeInterval);
-        this.showModal = false;
+        // clearInterval(this.timeInterval);
+        // this.showModal = false;
         // this.time = '获取验证码';
-        this.currentTime = 61;
-        this.disabled = false;
+        // this.currentTime = 61;
+        // this.disabled = false;
   },
   onHide(){
-    this.time = '获取验证码';
+    // this.time = '获取验证码';
+    // this.disabled = false;
   },
   onUnload(){
+    clearInterval(this.timeInterval);
     this.time = '获取验证码';
   },
   onLoad(){
@@ -295,6 +297,7 @@ export default {
       this.username = "";
       this.authCode = "";
       this.time = '获取验证码';
+      this.disabled = false;
   }
 }
 </script>
